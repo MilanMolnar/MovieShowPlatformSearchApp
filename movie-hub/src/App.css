@@ -4,6 +4,7 @@ body {
 }
 
 .dark body {
-  background-color: #1a202c; /* a dark color */
+  /* if dark mode is enabled */
+  background-color: #1a202c;
   color: #f7fafc;
 }
