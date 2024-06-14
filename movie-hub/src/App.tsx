@@ -1,5 +1,6 @@
 import "./App.css";
 import NavBar from "./components/NavBar";
+import TvShowGrid from "./components/TvShowGrid";
 
 function App() {
   return (
@@ -7,7 +8,9 @@ function App() {
       <NavBar />
       <div className="flex-grow flex overflow-auto">
         <aside className="border hidden sm:block w-64 p-4">Sidebar</aside>
-        <main className="border flex-grow p-4">Main Content</main>
+        <main className="border flex-grow p-4">
+          <TvShowGrid />
+        </main>
       </div>
     </div>
   );
