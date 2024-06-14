@@ -1,39 +1,9 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
-
-interface TvShow {
-  id: number;
-  name: string;
-  overview: string;
-  poster_path: string;
-  backdrop_path: string;
-  vote_average: number;
-  vote_count: number;
-  first_air_date: string;
-}
-
-interface FetchGamesResponse {
-  count: number;
-  next: string;
-  previous: string;
-  results: TvShow[];
-}
+import useTvShows from "../hooks/useTvShows";
 
 const TvShowGrid = () => {
-  const [tvShows, setTvShows] = useState<TvShow[]>([]);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    apiClient
-      .get<FetchGamesResponse>("/3/tv/popular")
-      .then((response) => {
-        setTvShows(response.data.results);
-      })
-      .catch((error) => {
-        setError(error.message);
-      });
-  }, []);
-
+  const { tvShows, error } = useTvShows();
   return (
     <>
       {error && <div>{error}</div>}
