@@ -1,5 +1,3 @@
-import React from "react";
-
 const TvShowSkeleton = () => {
   return (
     <div className="p-4 animate-pulse">

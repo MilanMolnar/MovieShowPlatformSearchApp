@@ -29,8 +29,6 @@ const useData = <T>(endpoint: string) => {
         signal: controller.signal,
       })
       .then((response) => {
-        console.log(response);
-
         if ("genres" in response.data) {
           setData(response.data.genres);
         } else if ("results" in response.data) {
@@ -46,9 +44,7 @@ const useData = <T>(endpoint: string) => {
       });
 
     return () => controller.abort(); // cleanup function
-  }, []);
-
-  console.log(data);
+  }, [endpoint]);
 
   return { data, error, loading };
 };

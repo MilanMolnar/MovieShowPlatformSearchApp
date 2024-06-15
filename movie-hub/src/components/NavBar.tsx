@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import logoLight from "../assets/light_logo.webp";
 import logoDark from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
