@@ -3,7 +3,13 @@ export default {
   darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      backdropBlur: {
+        none: "0",
+        blur: "blur(20px)",
+        lg: "blur(40px)",
+      },
+    },
   },
   plugins: [],
 };

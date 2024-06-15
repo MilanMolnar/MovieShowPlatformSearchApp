@@ -9,7 +9,7 @@ interface FetchTvShowsResponse {
   results: TvShow[];
 }
 
-interface TvShow {
+export interface TvShow {
   id: number;
   name: string;
   overview: string;
@@ -20,7 +20,7 @@ interface TvShow {
   first_air_date: string;
 }
 
-const useTvShows = () => {
+const usePopularTvShows = () => {
   const [tvShows, setTvShows] = useState<TvShow[]>([]);
   const [error, setError] = useState("");
   useEffect(() => {
@@ -41,4 +41,4 @@ const useTvShows = () => {
   return { tvShows, error };
 };
 
-export default useTvShows;
+export default usePopularTvShows;
