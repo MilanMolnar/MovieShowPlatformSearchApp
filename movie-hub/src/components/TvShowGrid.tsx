@@ -3,7 +3,7 @@ import TvShowCard from "./TvShowCard";
 import TvShowSkeleton from "./TvShowSkeleton";
 
 const TvShowGrid = () => {
-  const { tvShows, error, loading } = useTvShows();
+  const { data, error, loading } = useTvShows();
   const skeletonCount = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
   ];
@@ -13,8 +13,8 @@ const TvShowGrid = () => {
       <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-2">
         {loading &&
           skeletonCount.map((skeleton) => <TvShowSkeleton key={skeleton} />)}
-        {tvShows.map((tvShow) => (
-          <TvShowCard tvShow={tvShow}></TvShowCard>
+        {data.map((data) => (
+          <TvShowCard tvShow={data}></TvShowCard>
         ))}
       </div>
     </>
