@@ -1,24 +1,8 @@
-import { useState, useEffect } from "react";
+import { useDarkMode } from "../providers/DarkmodeContextProvider";
 import { FaMoon, FaSun } from "react-icons/fa";
 
-const DarkModeToggle = () => {
-  const [darkMode, setDarkMode] = useState(() => {
-    const saved = localStorage.getItem("darkMode");
-    return saved !== null ? JSON.parse(saved) : true; // default to dark mode
-  });
-
-  useEffect(() => {
-    localStorage.setItem("darkMode", JSON.stringify(darkMode));
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [darkMode]);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+const ColorSwitch = () => {
+  const { darkMode, toggleDarkMode } = useDarkMode();
 
   return (
     <div className="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
@@ -48,4 +32,4 @@ const DarkModeToggle = () => {
   );
 };
 
-export default DarkModeToggle;
+export default ColorSwitch;

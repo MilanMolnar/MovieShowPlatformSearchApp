@@ -1,12 +1,33 @@
-import React from "react";
-import logo from "../assets/logo.webp";
+import React, { useEffect } from "react";
+import logoLight from "../assets/light_logo.webp";
+import logoDark from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
+import { useDarkMode } from "../providers/DarkmodeContextProvider";
 
 const NavBar = () => {
+  const { darkMode } = useDarkMode();
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
+
+  const logo = darkMode ? logoDark : logoLight;
+
+  // Add a timestamp to the logo URL to bypass the cache
+  const logoSrc = `${logo}?timestamp=${Date.now()}`;
+
   return (
-    //want to create a horizontally stacking items for navbar component, the fist element should be the logo.webp found in the public folder use tailwind where aplicable
     <nav className="flex items-center px-4 py-2">
-      <img src={logo} alt="logo" className="w-16 h-16 rounded-full shadow" />
+      <img
+        key={logoSrc}
+        src={logoSrc}
+        alt="logo"
+        className="w-16 h-16 rounded-full shadow"
+      />
       <div className="flex justify-between w-full">
         <ul id="left-nav" className="flex">
           <li className="ml-4">search</li>

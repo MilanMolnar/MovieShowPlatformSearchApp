@@ -40,7 +40,7 @@ const useData = <T>(endpoint: string) => {
         setLoading(false);
       })
       .catch((error) => {
-        if (error instanceof CanceledError) return;
+        if (error instanceof CanceledError) return; // ignore canceled requests
         setError(error.message);
         setLoading(false);
       });

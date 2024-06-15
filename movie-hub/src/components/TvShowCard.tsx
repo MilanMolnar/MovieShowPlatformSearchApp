@@ -14,7 +14,7 @@ const TvShowCard = ({ tvShow }: Props) => {
   return (
     <div className=" p-4">
       <div
-        className=" relative h-64 rounded-t-lg overflow-hidden shadow-lg transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105"
+        className="relative h-64 overflow-hidden shadow-gray-500 dark:shadow-gray-900 shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
         style={{
           backgroundImage: `url(${imageUrl})`,
           backgroundSize: "cover",
