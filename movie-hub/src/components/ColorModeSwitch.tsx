@@ -22,7 +22,7 @@ const ColorSwitch = () => {
       >
         <span
           className={`toggle-dot absolute w-6 h-6 rounded-full shadow inset-y-0 left-0 transform transition-transform duration-200 ease-in-out ${
-            darkMode ? "translate-x-4 bg-gray-900" : "translate-x-0 bg-white"
+            darkMode ? "translate-x-4 bg-gray-700" : "translate-x-0 bg-white"
           } flex justify-center items-center`}
         >
           {darkMode ? <FaMoon /> : <FaSun />}

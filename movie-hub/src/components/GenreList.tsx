@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useGenres, { Genre } from "../hooks/useGenres";
 import Spinner from "./Spinner";
+import { Platform } from "../hooks/usePlatforms";
 
 interface Props {
   onSelectGenres: (genres: Genre[]) => void;
@@ -57,7 +58,7 @@ const GenreList = ({ onSelectGenres }: Props) => {
             key={genre.id}
             className={`m-2 p-2 shadow-gray-300 dark:shadow-black shadow-md dark:bg-gray-900 bg-gray-100 dark:text-gray-300 rounded-lg transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105 ${
               selectedGenres.find((g) => g.id === genre.id)
-                ? "bg-blue-300 dark:bg-gray-600 dark:text-white"
+                ? "bg-blue-400 dark:bg-gray-500 dark:text-white"
                 : ""
             }`}
             onClick={() => handleGenreClick(genre)}

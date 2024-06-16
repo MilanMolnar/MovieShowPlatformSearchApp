@@ -1,3 +1,4 @@
+import { Platform } from "../hooks/usePlatforms";
 import useTvShows, { TvShow } from "../hooks/useTvShows";
 import TvShowCard from "./TvShowCard";
 import TvShowSkeleton from "./TvShowSkeleton";
@@ -8,6 +9,8 @@ interface Props {
     error: string;
     loading: boolean;
   };
+
+  selectedPlatform: Platform | null;
 }
 
 const TvShowGrid = ({ tvShowsData }: Props) => {

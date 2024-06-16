@@ -1,14 +1,43 @@
 import { useState } from "react";
-import usePlatforms from "../hooks/usePlatforms";
+import usePlatforms, { Platform } from "../hooks/usePlatforms";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import Spinner from "./Spinner";
 
-const PlatformSelector = () => {
-  const { data } = usePlatforms();
+interface Props {
+  onSelectPlatform: (platform: Platform) => void;
+}
+
+const PlatformSelector = ({ onSelectPlatform }: Props) => {
+  const { data, error, loading } = usePlatforms();
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("Providers");
+  const nullDataInHU = [
+    "Apple TV",
+    "Google Play Movies",
+    "MUBI",
+    "Dekkoo",
+    "DOCSVILLE",
+    "WOW Presents Plus",
+    "BroadwayHD",
+    "Cultpix",
+    "FilmBox+",
+    "Max Amazon Channel",
+    "HBO Max",
+  ];
   const priorityHU = data.filter(
     (platform) => platform.display_priorities["HU"] > 0
   );
+  const filteredData = priorityHU.filter(
+    (platform) => !nullDataInHU.includes(platform.provider_name)
+  );
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return null;
+  }
 
   return (
     <div className="relative inline-block text-left ml-4">
@@ -36,7 +65,7 @@ const PlatformSelector = () => {
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            {priorityHU.map((platform) => (
+            {filteredData.map((platform) => (
               <a
                 key={platform.provider_id}
                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-900"
@@ -44,6 +73,7 @@ const PlatformSelector = () => {
                 onClick={() => {
                   setSelected(platform.provider_name);
                   setIsOpen(false);
+                  onSelectPlatform(platform);
                 }}
               >
                 {platform.provider_name}

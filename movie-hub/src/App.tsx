@@ -7,11 +7,14 @@ import { Genre } from "./hooks/useGenres";
 import { DarkModeProvider } from "./providers/DarkmodeContextProvider";
 import useTvShows from "./hooks/useTvShows";
 import PlatformSelector from "./components/PlatformSelector";
+import { Platform } from "./hooks/usePlatforms";
 
 function App() {
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
-  const tvShowsData = useTvShows(selectedGenres);
-
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
+    null
+  );
+  const tvShowsData = useTvShows(selectedGenres, selectedPlatform);
   return (
     <DarkModeProvider>
       <div className="flex flex-col h-screen">
@@ -20,9 +23,14 @@ function App() {
           <aside className=" hidden sm:block w-52 p-4">
             <GenreList onSelectGenres={setSelectedGenres} />
           </aside>
-          <main className=" flex-grow p-4">
-            <PlatformSelector />
-            <TvShowGrid tvShowsData={tvShowsData} />
+          <main className=" flex-grow p-4 ">
+            <PlatformSelector
+              onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+            />
+            <TvShowGrid
+              selectedPlatform={selectedPlatform}
+              tvShowsData={tvShowsData}
+            />
           </main>
         </div>
       </div>

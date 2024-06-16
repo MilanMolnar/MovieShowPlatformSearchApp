@@ -11,5 +11,8 @@ export default {
       },
     },
   },
-  plugins: [],
+  variants: {
+    scrollbar: ["dark"],
+  },
+  plugins: [require("tailwind-scrollbar")()],
 };

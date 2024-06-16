@@ -21,7 +21,7 @@ const NavBar = () => {
   const logoSrc = `${logo}?timestamp=${Date.now()}`;
 
   return (
-    <nav className="flex items-start">
+    <nav className="flex items-start bg-gray-100 dark:bg-gray-900">
       <img src={logoSrc} alt="logo" className="w-20 h-20 shadow" />
       <div className="px-8 py-6 flex justify-between w-full">
         <ul id="left-nav" className="flex px-2">

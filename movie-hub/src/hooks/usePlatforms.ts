@@ -4,7 +4,7 @@ interface DisplayPriorities {
   [key: string]: number;
 }
 
-interface Platform {
+export interface Platform {
   display_priorities: DisplayPriorities;
   display_priority: number;
   logo_path: string;
