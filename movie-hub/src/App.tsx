@@ -25,6 +25,7 @@ function App() {
           </aside>
           <main className=" flex-grow p-4 ">
             <PlatformSelector
+              selectedPlatform={selectedPlatform}
               onSelectPlatform={(platform) => setSelectedPlatform(platform)}
             />
             <TvShowGrid

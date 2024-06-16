@@ -5,12 +5,12 @@ import Spinner from "./Spinner";
 
 interface Props {
   onSelectPlatform: (platform: Platform) => void;
+  selectedPlatform: Platform | null;
 }
 
-const PlatformSelector = ({ onSelectPlatform }: Props) => {
+const PlatformSelector = ({ onSelectPlatform, selectedPlatform }: Props) => {
   const { data, error, loading } = usePlatforms();
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState("Providers");
   const nullDataInHU = [
     "Apple TV",
     "Google Play Movies",
@@ -51,7 +51,9 @@ const PlatformSelector = ({ onSelectPlatform }: Props) => {
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="flex justify-between w-full">
-            <div className="">{selected}</div>
+            <div className="">
+              {selectedPlatform ? selectedPlatform.provider_name : "Providers"}
+            </div>
             {isOpen ? <FaCaretUp size={20} /> : <FaCaretDown size={20} />}
           </div>
         </button>
@@ -71,7 +73,6 @@ const PlatformSelector = ({ onSelectPlatform }: Props) => {
                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-900"
                 role="menuitem"
                 onClick={() => {
-                  setSelected(platform.provider_name);
                   setIsOpen(false);
                   onSelectPlatform(platform);
                 }}
