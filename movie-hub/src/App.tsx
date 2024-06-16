@@ -6,6 +6,7 @@ import TvShowGrid from "./components/TvShowGrid";
 import { Genre } from "./hooks/useGenres";
 import { DarkModeProvider } from "./providers/DarkmodeContextProvider";
 import useTvShows from "./hooks/useTvShows";
+import PlatformSelector from "./components/PlatformSelector";
 
 function App() {
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
@@ -20,6 +21,7 @@ function App() {
             <GenreList onSelectGenres={setSelectedGenres} />
           </aside>
           <main className=" flex-grow p-4">
+            <PlatformSelector />
             <TvShowGrid tvShowsData={tvShowsData} />
           </main>
         </div>

@@ -21,20 +21,15 @@ const NavBar = () => {
   const logoSrc = `${logo}?timestamp=${Date.now()}`;
 
   return (
-    <nav className="flex items-center px-4 py-2">
-      <img
-        key={logoSrc}
-        src={logoSrc}
-        alt="logo"
-        className="w-16 h-16 rounded-full shadow"
-      />
-      <div className="flex justify-between w-full">
-        <ul id="left-nav" className="flex">
-          <li className="ml-4">search</li>
+    <nav className="flex items-start">
+      <img src={logoSrc} alt="logo" className="w-20 h-20 shadow" />
+      <div className="px-8 py-6 flex justify-between w-full">
+        <ul id="left-nav" className="flex px-2">
+          <li>search</li>
         </ul>
-        <ul id="right-nav" className="flex">
+        <ul id="right-nav" className="flex px-2">
           <ColorModeSwitch />
-          <li className="ml-4">Profile</li>
+          <li className="px-6">Profile</li>
         </ul>
       </div>
     </nav>

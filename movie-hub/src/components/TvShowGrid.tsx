@@ -18,7 +18,7 @@ const TvShowGrid = ({ tvShowsData }: Props) => {
   return (
     <>
       {error && <div>{error}</div>}
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-2">
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-1">
         {loading &&
           skeletonCount.map((skeleton) => <TvShowSkeleton key={skeleton} />)}
         {data.map((data) => (
