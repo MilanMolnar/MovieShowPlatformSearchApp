@@ -10,6 +10,7 @@ import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/usePlatforms";
 import useQuickSearch from "./hooks/useQuickSearch";
 import TvShowHeading from "./components/TvShowHeading";
+import RegionSelector from "./components/RegionSelector";
 
 function App() {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -46,11 +47,18 @@ function App() {
               platform={platform}
               genres={genres}
             />
-            <PlatformSelector
-              onApply={handleApply}
-              selectedPlatform={platform}
-              onSelectPlatform={setPlatform}
-            />
+            <div>
+              <PlatformSelector
+                onApply={handleApply}
+                selectedPlatform={platform}
+                onSelectPlatform={setPlatform}
+              />
+              <RegionSelector
+                onApply={() => console.log("Apply")}
+                selectedRegion={"HU"}
+                onSelectedRegion={() => console.log("Selected Region")}
+              />
+            </div>
             <TvShowGrid selectedPlatform={platform} tvShowsData={tvShowsData} />
           </main>
         </div>

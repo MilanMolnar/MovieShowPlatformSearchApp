@@ -5,7 +5,7 @@ const ColorSwitch = () => {
   const { darkMode, toggleDarkMode } = useDarkMode();
 
   return (
-    <div className="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+    <div className="relative mt-1 inline-block w-10 align-middle select-none transition duration-200 ease-in">
       <input
         type="checkbox"
         name="toggle"

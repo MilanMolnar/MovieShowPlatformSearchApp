@@ -41,18 +41,20 @@ const GenreList = ({ onSelectGenres, onApply }: Props) => {
 
   return (
     <>
-      {selectedGenres.length > 0 ? (
-        <button
-          className="text-2xl ml-14 font-semibold text-center m-4 underline text-blue-600 dark:text-white "
-          onClick={handleApplyClick}
-        >
-          Apply
-        </button>
-      ) : (
-        <p className="text-2xl font-semibold text-center m-4 underline dark:text-gray-300 ">
-          Genres
-        </p>
-      )}
+      <div className="flex justify-center">
+        {selectedGenres.length > 0 ? (
+          <button
+            className="text-2xl font-semibold text-center m-4 underline text-blue-600 dark:text-white "
+            onClick={handleApplyClick}
+          >
+            Apply
+          </button>
+        ) : (
+          <p className="text-2xl font-semibold text-center m-4 dark:text-gray-300 ">
+            Genres
+          </p>
+        )}
+      </div>
       <div className="flex flex-wrap justify-center ">
         {data.map((genre) => (
           <button

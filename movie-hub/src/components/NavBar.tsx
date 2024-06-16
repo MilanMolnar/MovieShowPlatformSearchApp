@@ -25,14 +25,24 @@ const NavBar = ({ onSearch }: Props) => {
   // Add a timestamp to the logo URL to bypass the cache
   const logoSrc = `${logo}?timestamp=${Date.now()}`;
 
+  const handleLogoClick = () => {
+    // Refresh the page
+    window.location.reload();
+  };
+
   return (
     <nav className="flex items-start bg-gray-100 dark:bg-gray-900">
-      <img src={logoSrc} alt="logo" className="w-20 h-20 shadow" />
+      <img
+        src={logoSrc}
+        onClick={handleLogoClick}
+        alt="logo"
+        className="w-20 h-20 shadow"
+      />
       <div className="px-8 py-6 flex justify-between w-full">
         <SearchBox onSearch={onSearch} />
         <ul id="right-nav" className="flex px-2">
           <ColorModeSwitch />
-          <li className="px-6">Profile</li>
+          <li className="px-6 mt-1">Profile</li>
         </ul>
       </div>
     </nav>

@@ -24,9 +24,11 @@ const TvShowGrid = ({ tvShowsData }: Props) => {
       <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-1">
         {loading &&
           skeletonCount.map((skeleton) => <TvShowSkeleton key={skeleton} />)}
-        {data.map((data) => (
-          <TvShowCard key={data.id} tvShow={data}></TvShowCard>
-        ))}
+        {data.length === 0 ? (
+          <div className="text-2xl ml-4 my-2 w-full">No Tv Shows Found :(</div>
+        ) : (
+          data.map((tvShow) => <TvShowCard key={tvShow.id} tvShow={tvShow} />)
+        )}
       </div>
     </>
   );
