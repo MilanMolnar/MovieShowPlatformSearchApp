@@ -6,9 +6,14 @@ import Spinner from "./Spinner";
 interface Props {
   onSelectPlatform: (platform: Platform) => void;
   selectedPlatform: Platform | null;
+  onApply: () => void;
 }
 
-const PlatformSelector = ({ onSelectPlatform, selectedPlatform }: Props) => {
+const PlatformSelector = ({
+  onSelectPlatform,
+  selectedPlatform,
+  onApply,
+}: Props) => {
   const { data, error, loading } = usePlatforms();
   const [isOpen, setIsOpen] = useState(false);
   const nullDataInHU = [
@@ -75,6 +80,7 @@ const PlatformSelector = ({ onSelectPlatform, selectedPlatform }: Props) => {
                 onClick={() => {
                   setIsOpen(false);
                   onSelectPlatform(platform);
+                  onApply();
                 }}
               >
                 {platform.provider_name}

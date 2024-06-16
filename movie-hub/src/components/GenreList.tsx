@@ -1,7 +1,6 @@
 import { useState } from "react";
 import useGenres, { Genre } from "../hooks/useGenres";
 import Spinner from "./Spinner";
-import { Platform } from "../hooks/usePlatforms";
 
 interface Props {
   onSelectGenres: (genres: Genre[]) => void;

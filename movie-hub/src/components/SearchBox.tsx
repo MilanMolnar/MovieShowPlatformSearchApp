@@ -25,8 +25,6 @@ const SearchBox = ({ onSearch }: Props) => {
         onClick={() => {
           if (searchQuery) {
             onSearch(searchQuery);
-          } else {
-            onSearch("");
           }
         }}
         className=" px-4 font-bold text-white bg-blue-500 rounded-r-md hover:bg-blue-600 dark:bg-gray-600 dark:hover:bg-gray-500"

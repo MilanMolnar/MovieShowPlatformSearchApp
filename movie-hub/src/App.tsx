@@ -9,6 +9,7 @@ import useTvShows from "./hooks/useTvShows";
 import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/usePlatforms";
 import useQuickSearch from "./hooks/useQuickSearch";
+import TvShowHeading from "./components/TvShowHeading";
 
 function App() {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -39,7 +40,14 @@ function App() {
             <GenreList onApply={handleApply} onSelectGenres={setGenres} />
           </aside>
           <main className=" flex-grow p-4 ">
+            <TvShowHeading
+              searchQuery={searchQuery}
+              isSearching={isSearching}
+              platform={platform}
+              genres={genres}
+            />
             <PlatformSelector
+              onApply={handleApply}
               selectedPlatform={platform}
               onSelectPlatform={setPlatform}
             />
