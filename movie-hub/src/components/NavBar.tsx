@@ -3,8 +3,13 @@ import logoLight from "../assets/light_logo.webp";
 import logoDark from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
 import { useDarkMode } from "../providers/DarkmodeContextProvider";
+import SearchBox from "./SearchBox";
 
-const NavBar = () => {
+interface Props {
+  onSearch: (searchQuery: string) => void;
+}
+
+const NavBar = ({ onSearch }: Props) => {
   const { darkMode } = useDarkMode();
 
   useEffect(() => {
@@ -24,9 +29,7 @@ const NavBar = () => {
     <nav className="flex items-start bg-gray-100 dark:bg-gray-900">
       <img src={logoSrc} alt="logo" className="w-20 h-20 shadow" />
       <div className="px-8 py-6 flex justify-between w-full">
-        <ul id="left-nav" className="flex px-2">
-          <li>search</li>
-        </ul>
+        <SearchBox onSearch={onSearch} />
         <ul id="right-nav" className="flex px-2">
           <ColorModeSwitch />
           <li className="px-6">Profile</li>

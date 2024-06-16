@@ -8,30 +8,42 @@ import { DarkModeProvider } from "./providers/DarkmodeContextProvider";
 import useTvShows from "./hooks/useTvShows";
 import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/usePlatforms";
+import useQuickSearch from "./hooks/useQuickSearch";
 
 function App() {
-  const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(
-    null
-  );
-  const tvShowsData = useTvShows(selectedGenres, selectedPlatform);
+  const [genres, setGenres] = useState<Genre[]>([]);
+  const [platform, setPlatform] = useState<Platform | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const filterData = useTvShows(genres, platform);
+  const quickSearchData = useQuickSearch(searchQuery);
+
+  const tvShowsData = isSearching ? quickSearchData : filterData;
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setIsSearching(true);
+  };
+
+  const handleApply = () => {
+    setIsSearching(false);
+  };
+
   return (
     <DarkModeProvider>
       <div className="flex flex-col h-screen">
-        <NavBar />
+        <NavBar onSearch={handleSearch} />
         <div className="flex-grow flex overflow-auto">
           <aside className=" hidden sm:block w-52 p-4">
-            <GenreList onSelectGenres={setSelectedGenres} />
+            <GenreList onApply={handleApply} onSelectGenres={setGenres} />
           </aside>
           <main className=" flex-grow p-4 ">
             <PlatformSelector
-              selectedPlatform={selectedPlatform}
-              onSelectPlatform={(platform) => setSelectedPlatform(platform)}
+              selectedPlatform={platform}
+              onSelectPlatform={setPlatform}
             />
-            <TvShowGrid
-              selectedPlatform={selectedPlatform}
-              tvShowsData={tvShowsData}
-            />
+            <TvShowGrid selectedPlatform={platform} tvShowsData={tvShowsData} />
           </main>
         </div>
       </div>

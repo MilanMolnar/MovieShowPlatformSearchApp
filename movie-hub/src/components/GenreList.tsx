@@ -5,9 +5,10 @@ import { Platform } from "../hooks/usePlatforms";
 
 interface Props {
   onSelectGenres: (genres: Genre[]) => void;
+  onApply: () => void;
 }
 
-const GenreList = ({ onSelectGenres }: Props) => {
+const GenreList = ({ onSelectGenres, onApply }: Props) => {
   const { data, error, loading } = useGenres();
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
 
@@ -23,6 +24,7 @@ const GenreList = ({ onSelectGenres }: Props) => {
     console.log(selectedGenres);
 
     onSelectGenres(selectedGenres);
+    onApply();
   };
 
   const handleClearClick = () => {

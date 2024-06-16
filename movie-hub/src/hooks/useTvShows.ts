@@ -15,7 +15,6 @@ export interface TvShow {
 
 const useTvShows = (genres: Genre[], selectedPlatform: Platform | null) => {
   const genreIds = genres.map((genre) => genre.id).join(",");
-  console.log(genreIds);
 
   if (!selectedPlatform) {
     return useData<TvShow>(`/3/discover/tv?with_genres=${genreIds}`);
