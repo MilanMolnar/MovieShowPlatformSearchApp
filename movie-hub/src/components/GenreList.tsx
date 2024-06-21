@@ -20,8 +20,6 @@ const GenreList = ({ onSelectGenres, onApply }: Props) => {
   };
 
   const handleApplyClick = () => {
-    console.log(selectedGenres);
-
     onSelectGenres(selectedGenres);
     onApply();
   };
@@ -59,11 +57,11 @@ const GenreList = ({ onSelectGenres, onApply }: Props) => {
         {data.map((genre) => (
           <button
             key={genre.id}
-            className={`m-2 p-2 shadow-gray-300 dark:shadow-black shadow-md dark:bg-gray-900 bg-gray-100 dark:text-gray-300 rounded-lg transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105 ${
+            className={`m-2 p-2 shadow-gray-300 dark:shadow-gray-950 shadow-md ${
               selectedGenres.find((g) => g.id === genre.id)
-                ? "bg-blue-400 dark:bg-gray-500 dark:text-white"
+                ? "bg-blue-300  dark:bg-gray-600 dark:text-white"
                 : ""
-            }`}
+            } dark:text-gray-300 rounded-lg transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105 `}
             onClick={() => handleGenreClick(genre)}
           >
             {genre.name}

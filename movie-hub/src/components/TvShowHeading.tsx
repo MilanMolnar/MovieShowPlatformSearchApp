@@ -22,6 +22,9 @@ const TvShowHeading = ({
     return <h1 className="text-3xl ml-4 my-2">Discover Shows</h1>;
   }
   const genreNames = genres.map((genre) => genre.name).join(", ");
+  if (!platform) {
+    return <h1 className="text-3xl ml-4 my-2">{genreNames} Shows</h1>;
+  }
   const heading = `${genreNames} ${platform?.provider_name} Shows`;
   return <h1 className="text-3xl ml-4 my-2">{heading}</h1>;
 };
