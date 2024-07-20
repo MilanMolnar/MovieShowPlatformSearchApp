@@ -12,8 +12,10 @@ export interface Platform {
   provider_id: number;
 }
 
-const usePlatforms = () => {
-  return useData<Platform>("/3/watch/providers/tv");
+const usePlatforms = (watch_region: string) => {
+  return useData<Platform>(
+    `/3/watch/providers/tv?watch_region=${watch_region}`
+  );
 };
 
 export default usePlatforms;

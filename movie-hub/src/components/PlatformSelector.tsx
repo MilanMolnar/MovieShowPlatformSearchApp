@@ -7,14 +7,16 @@ interface Props {
   onSelectPlatform: (platform: Platform) => void;
   selectedPlatform: Platform | null;
   onApply: () => void;
+  watch_region: string;
 }
 
 const PlatformSelector = ({
   onSelectPlatform,
   selectedPlatform,
   onApply,
+  watch_region,
 }: Props) => {
-  const { data, error, loading } = usePlatforms();
+  const { data, error, loading } = usePlatforms(watch_region || "HU");
   const [isOpen, setIsOpen] = useState(false);
   const nullDataInHU = [
     "Apple TV",
@@ -29,12 +31,12 @@ const PlatformSelector = ({
     "Max Amazon Channel",
     "HBO Max",
   ];
-  const priorityHU = data.filter(
-    (platform) => platform.display_priorities["HU"] > 0
-  );
-  const filteredData = priorityHU.filter(
-    (platform) => !nullDataInHU.includes(platform.provider_name)
-  );
+  const filteredData =
+    watch_region === null || watch_region === undefined || watch_region === "HU"
+      ? data.filter(
+          (platform) => !nullDataInHU.includes(platform.provider_name)
+        )
+      : data;
 
   if (loading) {
     return <Spinner />;

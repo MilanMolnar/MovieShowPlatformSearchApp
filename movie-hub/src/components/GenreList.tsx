@@ -39,7 +39,7 @@ const GenreList = ({ onSelectGenres, onApply }: Props) => {
 
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-9">
         {selectedGenres.length > 0 ? (
           <button
             className="text-2xl font-semibold text-center m-4 underline text-blue-600 dark:text-white "
