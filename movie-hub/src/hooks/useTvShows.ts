@@ -21,6 +21,12 @@ const useTvShows = (
 ) => {
   const genreIds = genres.map((genre) => genre.id).join(",");
 
+  if (genres.length > 0 && !selectedPlatform && selectedRegion) {
+    return useData<TvShow>(
+      `/3/discover/tv?include_adult=true&language=en-US&with_genres=${genreIds}&watch_region=${selectedRegion?.iso_3166_1}&with_watch_monetization_types=flatrate`
+    );
+  }
+
   if (!genres.length && !selectedPlatform) {
     return useData<TvShow>(
       `/3/discover/tv?include_adult=true&language=en-US&watch_region=${selectedRegion?.iso_3166_1}&with_watch_monetization_types=flatrate`
@@ -32,6 +38,7 @@ const useTvShows = (
       `/3/discover/tv?with_genres=${genreIds}&watch_region=${selectedRegion?.iso_3166_1}`
     );
   }
+
   if (!selectedRegion) {
     return useData<TvShow>(
       `/3/discover/tv?with_genres=${genreIds}&with_watch_providers=${selectedPlatform?.provider_id}&watch_region=HU`

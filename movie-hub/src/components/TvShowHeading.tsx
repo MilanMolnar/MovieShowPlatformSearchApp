@@ -33,7 +33,11 @@ const TvShowHeading = ({
   }
   const genreNames = genres.map((genre) => genre.name).join(", ");
   if (!platform) {
-    return <h1 className="text-3xl ml-4 my-2">{genreNames} Shows</h1>;
+    return (
+      <h1 className="text-3xl ml-4 my-2">
+        {genreNames} Shows in {region.english_name}
+      </h1>
+    );
   }
   const heading = `${genreNames} ${platform?.provider_name} Shows in ${region.iso_3166_1}`;
   return <h1 className="text-3xl ml-4 my-2">{heading}</h1>;
