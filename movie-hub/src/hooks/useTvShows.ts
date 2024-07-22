@@ -21,7 +21,7 @@ const useTvShows = (
 ) => {
   const genreIds = genres.map((genre) => genre.id).join(",");
 
-  if (!genres.length) {
+  if (!genres.length && !selectedPlatform) {
     return useData<TvShow>(
       `/3/discover/tv?include_adult=true&language=en-US&watch_region=${selectedRegion?.iso_3166_1}&with_watch_monetization_types=flatrate`
     );
