@@ -11,14 +11,19 @@ import { Platform } from "./hooks/usePlatforms";
 import useQuickSearch from "./hooks/useQuickSearch";
 import TvShowHeading from "./components/TvShowHeading";
 import RegionSelector from "./components/RegionSelector";
+import { Region } from "./hooks/useRegions";
 
 function App() {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [platform, setPlatform] = useState<Platform | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [region, setRegion] = useState<Region>({
+    iso_3166_1: "HU",
+    english_name: "Hungary",
+  });
 
-  const filterData = useTvShows(genres, platform);
+  const filterData = useTvShows(genres, region, platform);
   const quickSearchData = useQuickSearch(searchQuery);
 
   const tvShowsData = isSearching ? quickSearchData : filterData;
@@ -29,6 +34,11 @@ function App() {
   };
 
   const handleApply = () => {
+    setIsSearching(false);
+  };
+
+  const handleRegionApply = () => {
+    setPlatform(null);
     setIsSearching(false);
   };
 
@@ -46,17 +56,19 @@ function App() {
               isSearching={isSearching}
               platform={platform}
               genres={genres}
+              region={region}
             />
             <div>
               <PlatformSelector
+                watch_region={region.iso_3166_1}
                 onApply={handleApply}
                 selectedPlatform={platform}
                 onSelectPlatform={setPlatform}
               />
               <RegionSelector
-                onApply={() => console.log("Apply")}
-                selectedRegion={"HU"}
-                onSelectedRegion={() => console.log("Selected Region")}
+                onApply={handleRegionApply}
+                selectedRegion={region}
+                onSelectedRegion={setRegion}
               />
             </div>
             <TvShowGrid selectedPlatform={platform} tvShowsData={tvShowsData} />
