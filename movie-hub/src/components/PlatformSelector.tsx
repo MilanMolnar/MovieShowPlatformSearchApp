@@ -49,14 +49,28 @@ const PlatformSelector = ({
       >
         <div className="flex justify-between w-full">
           <div className="">Loading...</div>
-          {isOpen ? <FaCaretUp size={20} /> : <FaCaretDown size={20} />}
+          <FaCaretDown size={20} />
         </div>
       </button>
     );
   }
 
   if (error) {
-    return null;
+    return (
+      <button
+        type="button"
+        className="inline-flex ml-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+        id="options-menu"
+        aria-haspopup="true"
+        aria-expanded="true"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="flex justify-between w-full">
+          <div className="">Error in platfrom request.</div>
+          <FaCaretDown size={20} />
+        </div>
+      </button>
+    );
   }
 
   return (
