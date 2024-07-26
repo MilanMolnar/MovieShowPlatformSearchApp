@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
-import { CanceledError } from "axios";
+import { AxiosError } from "axios";
 
 interface PaginatedResponse<T> {
   count: number;
@@ -15,38 +15,27 @@ interface GenresResponse<T> {
 
 type FetchResponse<T> = PaginatedResponse<T> | GenresResponse<T>;
 
+const fetchData = async <T>(endpoint: string): Promise<T[]> => {
+  const response = await apiClient.get<FetchResponse<T>>(endpoint);
+  if ("genres" in response.data) {
+    return response.data.genres;
+  } else if ("results" in response.data) {
+    return response.data.results;
+  }
+  return [];
+};
+
 const useData = <T>(endpoint: string) => {
-  const [data, setData] = useState<T[]>([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const query = useQuery<T[], AxiosError>({
+    queryKey: [endpoint],
+    queryFn: () => fetchData(endpoint),
+  });
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setLoading(true);
-    apiClient
-      .get<FetchResponse<T>>(endpoint, {
-        signal: controller.signal,
-      })
-      .then((response) => {
-        if ("genres" in response.data) {
-          setData(response.data.genres);
-        } else if ("results" in response.data) {
-          setData(response.data.results);
-        }
-
-        setLoading(false);
-      })
-      .catch((error) => {
-        if (error instanceof CanceledError) return; // ignore canceled requests
-        setError(error.message);
-        setLoading(false);
-      });
-
-    return () => controller.abort(); // cleanup function
-  }, [endpoint]);
-
-  return { data, error, loading };
+  return {
+    data: query.data ?? [],
+    error: query.error ? query.error.message : "",
+    loading: query.isLoading,
+  };
 };
 
 export default useData;
