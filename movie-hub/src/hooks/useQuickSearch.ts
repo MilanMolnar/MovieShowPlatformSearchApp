@@ -24,9 +24,16 @@ const useQuickSearch = (searchQuery: string) => {
   const query = useInfiniteQuery<SearchResponse, AxiosError>({
     queryKey: ["quickSearch", searchQuery],
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await apiClient.get<SearchResponse>(
-        `/3/search/tv?query=${searchQuery}&include_adult=true&language=en-US&page=${pageParam}`
-      );
+      const params = {
+        query: searchQuery,
+        include_adult: true,
+        language: "en-US",
+        page: pageParam,
+      };
+
+      const response = await apiClient.get<SearchResponse>("/3/search/tv", {
+        params,
+      });
       return response.data;
     },
     enabled: !!searchQuery,

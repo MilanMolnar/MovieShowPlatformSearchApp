@@ -22,8 +22,13 @@ const usePlatforms = (watch_region: string) => {
   return useQuery<Platform[], AxiosError>({
     queryKey: ["platforms", watch_region],
     queryFn: async () => {
+      const params = {
+        watch_region,
+      };
+
       const response = await apiClient.get<PlatformsResponse>(
-        `/3/watch/providers/tv?watch_region=${watch_region}`
+        "/3/watch/providers/tv",
+        { params }
       );
       return response.data.results;
     },

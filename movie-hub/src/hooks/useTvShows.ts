@@ -33,24 +33,29 @@ const useTvShows = (
   const query = useInfiniteQuery<TvShowsResponse, AxiosError>({
     queryKey: ["tvShows", genres, selectedRegion, selectedPlatform],
     queryFn: async ({ pageParam = 1 }) => {
-      let endpoint = `/3/discover/tv?include_adult=true&language=en-US&page=${pageParam}&sort_by=popularity.desc`;
+      const params: any = {
+        include_adult: true,
+        language: "en-US",
+        page: pageParam,
+        sort_by: "popularity.desc",
+        with_watch_monetization_types: "flatrate|buy|free|rent|ads",
+      };
 
       if (selectedRegion) {
-        endpoint += `&watch_region=${selectedRegion.iso_3166_1}`;
+        params.watch_region = selectedRegion.iso_3166_1;
       }
 
       if (genreIds) {
-        endpoint += `&with_genres=${genreIds}`;
+        params.with_genres = genreIds;
       }
 
       if (selectedPlatform) {
-        endpoint += `&with_watch_providers=${selectedPlatform.provider_id}`;
+        params.with_watch_providers = selectedPlatform.provider_id;
       }
 
-      endpoint +=
-        "&with_watch_monetization_types=flatrate%7Cbuy%7Cfree%7Crent%7Cads";
-
-      const response = await apiClient.get<TvShowsResponse>(endpoint);
+      const response = await apiClient.get<TvShowsResponse>("/3/discover/tv", {
+        params,
+      });
       return response.data;
     },
     initialPageParam: 1,
