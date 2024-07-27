@@ -47,10 +47,10 @@ function App() {
       <div className="flex flex-col h-screen">
         <NavBar onSearch={handleSearch} />
         <div className="flex-grow flex overflow-auto">
-          <aside className=" hidden sm:block w-52 p-4">
+          <aside className="hidden sm:block w-52 p-4">
             <GenreList onApply={handleApply} onSelectGenres={setGenres} />
           </aside>
-          <main className=" flex-grow p-4 ">
+          <main className="flex-grow p-4 overflow-auto">
             <TvShowHeading
               searchQuery={searchQuery}
               isSearching={isSearching}
@@ -71,13 +71,7 @@ function App() {
                 onSelectedRegion={setRegion}
               />
             </div>
-            <TvShowGrid
-              selectedPlatform={platform}
-              tvShowsData={tvShowsData}
-              fetchNextPage={filterData.fetchNextPage}
-              hasNextPage={filterData.hasNextPage}
-              isFetchingNextPage={filterData.isFetchingNextPage}
-            />
+            <TvShowGrid selectedPlatform={platform} tvShowsData={tvShowsData} />
           </main>
         </div>
       </div>

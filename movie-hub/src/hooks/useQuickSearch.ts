@@ -1,5 +1,5 @@
 // useQuickSearch.ts
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { AxiosError } from "axios";
 
@@ -15,25 +15,36 @@ export interface TvShow {
 }
 
 interface SearchResponse {
+  page: number;
   results: TvShow[];
+  total_pages: number;
 }
 
 const useQuickSearch = (searchQuery: string) => {
-  const query = useQuery<TvShow[], AxiosError>({
+  const query = useInfiniteQuery<SearchResponse, AxiosError>({
     queryKey: ["quickSearch", searchQuery],
-    queryFn: async () => {
+    queryFn: async ({ pageParam = 1 }) => {
       const response = await apiClient.get<SearchResponse>(
-        `/3/search/tv?query=${searchQuery}&include_adult=true&language=en-US&page=1`
+        `/3/search/tv?query=${searchQuery}&include_adult=true&language=en-US&page=${pageParam}`
       );
-      return response.data.results;
+      return response.data;
     },
     enabled: !!searchQuery,
+    getNextPageParam: (lastPage) => {
+      return lastPage.page < lastPage.total_pages
+        ? lastPage.page + 1
+        : undefined;
+    },
+    initialPageParam: 1, // Added this line to specify the initial page parameter
   });
 
   return {
-    data: query.data ?? [],
+    data: query.data?.pages.flatMap((page) => page.results) ?? [],
     error: query.error ? query.error.message : "",
     isLoading: query.isLoading,
+    fetchNextPage: query.fetchNextPage,
+    hasNextPage: query.hasNextPage,
+    isFetchingNextPage: query.isFetchingNextPage,
   };
 };
 

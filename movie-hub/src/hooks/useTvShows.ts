@@ -1,4 +1,3 @@
-// useTvShows.ts
 import { useInfiniteQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { AxiosError } from "axios";
@@ -33,7 +32,7 @@ const useTvShows = (
 
   const query = useInfiniteQuery<TvShowsResponse, AxiosError>({
     queryKey: ["tvShows", genres, selectedRegion, selectedPlatform],
-    queryFn: async ({ pageParam }) => {
+    queryFn: async ({ pageParam = 1 }) => {
       let endpoint = `/3/discover/tv?include_adult=true&language=en-US&page=${pageParam}&sort_by=popularity.desc`;
 
       if (selectedRegion) {
