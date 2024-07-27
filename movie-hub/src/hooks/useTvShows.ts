@@ -1,5 +1,5 @@
 // useTvShows.ts
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { AxiosError } from "axios";
 import { Genre } from "./useGenres";
@@ -18,7 +18,10 @@ export interface TvShow {
 }
 
 interface TvShowsResponse {
+  page: number;
   results: TvShow[];
+  total_pages: number;
+  total_results: number;
 }
 
 const useTvShows = (
@@ -28,11 +31,10 @@ const useTvShows = (
 ) => {
   const genreIds = genres.map((genre) => genre.id).join(",");
 
-  const query = useQuery<TvShow[], AxiosError>({
+  const query = useInfiniteQuery<TvShowsResponse, AxiosError>({
     queryKey: ["tvShows", genres, selectedRegion, selectedPlatform],
-    queryFn: async () => {
-      let endpoint =
-        "/3/discover/tv?include_adult=true&language=en-US&page=1&sort_by=popularity.desc";
+    queryFn: async ({ pageParam }) => {
+      let endpoint = `/3/discover/tv?include_adult=true&language=en-US&page=${pageParam}&sort_by=popularity.desc`;
 
       if (selectedRegion) {
         endpoint += `&watch_region=${selectedRegion.iso_3166_1}`;
@@ -50,14 +52,20 @@ const useTvShows = (
         "&with_watch_monetization_types=flatrate%7Cbuy%7Cfree%7Crent%7Cads";
 
       const response = await apiClient.get<TvShowsResponse>(endpoint);
-      return response.data.results;
+      return response.data;
     },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) =>
+      lastPage.page < lastPage.total_pages ? lastPage.page + 1 : undefined,
   });
 
   return {
-    data: query.data ?? [],
+    data: query.data?.pages.flatMap((page) => page.results) ?? [],
     error: query.error ? query.error.message : "",
     isLoading: query.isLoading,
+    fetchNextPage: query.fetchNextPage,
+    hasNextPage: query.hasNextPage,
+    isFetchingNextPage: query.isFetchingNextPage,
   };
 };
 

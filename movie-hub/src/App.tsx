@@ -71,7 +71,13 @@ function App() {
                 onSelectedRegion={setRegion}
               />
             </div>
-            <TvShowGrid selectedPlatform={platform} tvShowsData={tvShowsData} />
+            <TvShowGrid
+              selectedPlatform={platform}
+              tvShowsData={tvShowsData}
+              fetchNextPage={filterData.fetchNextPage}
+              hasNextPage={filterData.hasNextPage}
+              isFetchingNextPage={filterData.isFetchingNextPage}
+            />
           </main>
         </div>
       </div>

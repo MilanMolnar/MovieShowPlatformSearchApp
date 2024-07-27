@@ -1,4 +1,4 @@
-// TvShowGrid.tsx
+import { useEffect, useRef } from "react";
 import { Platform } from "../hooks/usePlatforms";
 import { TvShow } from "../hooks/useTvShows";
 import TvShowCard from "./TvShowCard";
@@ -11,13 +11,22 @@ interface Props {
     isLoading: boolean;
   };
   selectedPlatform: Platform | null;
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
 }
 
-const TvShowGrid = ({ tvShowsData }: Props) => {
+const TvShowGrid = ({
+  tvShowsData,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+}: Props) => {
   const { data, error, isLoading } = tvShowsData;
   const skeletonCount = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
   ];
+
   return (
     <>
       {error && <div>{error}</div>}
@@ -30,6 +39,16 @@ const TvShowGrid = ({ tvShowsData }: Props) => {
           data.map((tvShow) => <TvShowCard key={tvShow.id} tvShow={tvShow} />)
         )}
       </div>
+      {isFetchingNextPage && <div>Loading more...</div>}
+      {fetchNextPage && hasNextPage && (
+        <button
+          onClick={fetchNextPage}
+          disabled={isFetchingNextPage}
+          className="mt-4 p-2 bg-blue-500 text-white rounded"
+        >
+          {isFetchingNextPage ? "Loading..." : "Load More"}
+        </button>
+      )}
     </>
   );
 };
