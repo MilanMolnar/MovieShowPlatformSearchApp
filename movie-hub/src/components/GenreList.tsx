@@ -8,7 +8,7 @@ interface Props {
 }
 
 const GenreList = ({ onSelectGenres, onApply }: Props) => {
-  const { data, error, loading } = useGenres();
+  const { data, error, isLoading } = useGenres();
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
 
   const handleGenreClick = (genre: Genre) => {
@@ -29,12 +29,12 @@ const GenreList = ({ onSelectGenres, onApply }: Props) => {
     onSelectGenres([]);
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Spinner />;
   }
 
   if (error) {
-    return <div className="error">{error}</div>;
+    return <div className="error">{error.message}</div>;
   }
 
   return (
@@ -54,7 +54,7 @@ const GenreList = ({ onSelectGenres, onApply }: Props) => {
         )}
       </div>
       <div className="flex flex-wrap justify-center ">
-        {data.map((genre) => (
+        {data?.map((genre) => (
           <button
             key={genre.id}
             className={`m-2 p-2 shadow-gray-300 dark:shadow-gray-950 shadow-md ${

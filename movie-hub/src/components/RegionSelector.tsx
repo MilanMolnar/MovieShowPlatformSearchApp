@@ -13,10 +13,10 @@ const RegionSelector = ({
   selectedRegion,
   onApply,
 }: Props) => {
-  const { data, error, loading } = useRegions();
+  const { data, error, isLoading } = useRegions();
   const [isOpen, setIsOpen] = useState(false);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <button
         type="button"
@@ -57,7 +57,7 @@ const RegionSelector = ({
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-56 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+          className="inline-flex justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
           id="options-menu"
           aria-haspopup="true"
           aria-expanded="true"
@@ -73,14 +73,14 @@ const RegionSelector = ({
       </div>
 
       {isOpen && (
-        <div className="origin-top-right max-h-96 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 overflow-auto z-50">
+        <div className="origin-top-right absolute right-0 mt-2 w-60 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 max-h-[440px] overflow-auto z-50">
           <div
             className="py-1"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            {data.map((region) => (
+            {data?.map((region) => (
               <a
                 key={region.iso_3166_1}
                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-900"

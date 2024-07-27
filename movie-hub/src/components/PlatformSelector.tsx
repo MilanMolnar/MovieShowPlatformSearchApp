@@ -15,7 +15,7 @@ const PlatformSelector = ({
   onApply,
   watch_region,
 }: Props) => {
-  const { data, error, loading } = usePlatforms(watch_region || "HU");
+  const { data, error, isLoading } = usePlatforms(watch_region || "HU");
   const [isOpen, setIsOpen] = useState(false);
   const nullDataInHU = [
     "Apple TV",
@@ -29,15 +29,19 @@ const PlatformSelector = ({
     "FilmBox+",
     "Max Amazon Channel",
     "HBO Max",
+    "Sun Nxt",
+    "Hayu",
+    "Magellan TV",
+    "Hoichoi",
   ];
   const filteredData =
     watch_region === null || watch_region === undefined || watch_region === "HU"
-      ? data.filter(
+      ? data?.filter(
           (platform) => !nullDataInHU.includes(platform.provider_name)
         )
       : data;
 
-  if (loading) {
+  if (isLoading) {
     return (
       <button
         type="button"
@@ -59,7 +63,7 @@ const PlatformSelector = ({
     return (
       <button
         type="button"
-        className="inline-flex ml-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+        className="inline-flex ml-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 "
         id="options-menu"
         aria-haspopup="true"
         aria-expanded="true"
@@ -94,14 +98,14 @@ const PlatformSelector = ({
       </div>
 
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-60 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-50">
+        <div className="origin-top-right absolute right-0 mt-2 w-60 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 max-h-[440px] overflow-auto z-50">
           <div
             className="py-1"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            {filteredData.map((platform) => (
+            {filteredData?.map((platform) => (
               <a
                 key={platform.provider_id}
                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-900"

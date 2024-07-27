@@ -1,4 +1,6 @@
-import useData from "./useData";
+import { useQuery } from "@tanstack/react-query";
+import apiClient from "../services/api-client";
+import { AxiosError } from "axios";
 
 interface DisplayPriorities {
   [key: string]: number;
@@ -12,10 +14,20 @@ export interface Platform {
   provider_id: number;
 }
 
+interface PlatformsResponse {
+  results: Platform[];
+}
+
 const usePlatforms = (watch_region: string) => {
-  return useData<Platform>(
-    `/3/watch/providers/tv?watch_region=${watch_region}`
-  );
+  return useQuery<Platform[], AxiosError>({
+    queryKey: ["platforms", watch_region],
+    queryFn: async () => {
+      const response = await apiClient.get<PlatformsResponse>(
+        `/3/watch/providers/tv?watch_region=${watch_region}`
+      );
+      return response.data.results;
+    },
+  });
 };
 
 export default usePlatforms;

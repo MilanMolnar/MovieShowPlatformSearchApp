@@ -1,4 +1,7 @@
-import useData from "./useData";
+// useQuickSearch.ts
+import { useQuery } from "@tanstack/react-query";
+import apiClient from "../services/api-client";
+import { AxiosError } from "axios";
 
 export interface TvShow {
   id: number;
@@ -11,15 +14,27 @@ export interface TvShow {
   first_air_date: string;
 }
 
+interface SearchResponse {
+  results: TvShow[];
+}
+
 const useQuickSearch = (searchQuery: string) => {
-  if (searchQuery) {
-    return useData<TvShow>(
-      `/3/search/tv?query=${searchQuery}&include_adult=true&language=en-US&page=1`
-    );
-  }
-  return useData<TvShow>(
-    `/3/search/tv?query=&include_adult=true&language=en-US&page=1`
-  );
+  const query = useQuery<TvShow[], AxiosError>({
+    queryKey: ["quickSearch", searchQuery],
+    queryFn: async () => {
+      const response = await apiClient.get<SearchResponse>(
+        `/3/search/tv?query=${searchQuery}&include_adult=true&language=en-US&page=1`
+      );
+      return response.data.results;
+    },
+    enabled: !!searchQuery,
+  });
+
+  return {
+    data: query.data ?? [],
+    error: query.error ? query.error.message : "",
+    isLoading: query.isLoading,
+  };
 };
 
 export default useQuickSearch;
