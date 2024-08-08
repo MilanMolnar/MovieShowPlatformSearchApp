@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useSearch } from "../providers/SearchmodeContextProvider";
 
-interface Props {
-  onSearch: (searchQuery: string) => void;
-}
-
-const SearchBox = ({ onSearch }: Props) => {
-  const [searchQuery, setSearchQuery] = useState("");
+const SearchBox = () => {
+  const [inputValue, setInputValue] = useState("");
+  const { handleSearch } = useSearch();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
+    setInputValue(event.target.value);
   };
 
   return (
@@ -18,13 +16,13 @@ const SearchBox = ({ onSearch }: Props) => {
         className="w-full px-4 py-1 text-gray-700 dark:text-gray-300 rounded-l-md bg-gray-300 dark:bg-gray-800 focus:outline-none focus:bg-white dark:focus:bg-gray-700"
         type="text"
         placeholder="Search..."
-        value={searchQuery}
+        value={inputValue}
         onChange={handleInputChange}
       />
       <button
         onClick={() => {
-          if (searchQuery) {
-            onSearch(searchQuery);
+          if (inputValue) {
+            handleSearch(inputValue);
           }
         }}
         className=" px-4 font-bold text-white bg-blue-500 rounded-r-md hover:bg-blue-600 dark:bg-gray-600 dark:hover:bg-gray-500"

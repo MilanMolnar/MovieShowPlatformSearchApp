@@ -5,11 +5,7 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import { useDarkMode } from "../providers/DarkmodeContextProvider";
 import SearchBox from "./SearchBox";
 
-interface Props {
-  onSearch: (searchQuery: string) => void;
-}
-
-const NavBar = ({ onSearch }: Props) => {
+const NavBar = () => {
   const { darkMode } = useDarkMode();
 
   useEffect(() => {
@@ -39,7 +35,7 @@ const NavBar = ({ onSearch }: Props) => {
         className="w-20 h-20 shadow"
       />
       <div className="px-8 py-6 flex justify-between w-full">
-        <SearchBox onSearch={onSearch} />
+        <SearchBox />
         <ul id="right-nav" className="flex px-2">
           <ColorModeSwitch />
           <li className="px-6 mt-1">Profile</li>

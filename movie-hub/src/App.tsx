@@ -12,26 +12,25 @@ import useQuickSearch from "./hooks/useQuickSearch";
 import TvShowHeading from "./components/TvShowHeading";
 import RegionSelector from "./components/RegionSelector";
 import { Region } from "./hooks/useRegions";
+import {
+  SearchProvider,
+  useSearch,
+} from "./providers/SearchmodeContextProvider"; // Import SearchProvider and useSearch
 
 function App() {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [platform, setPlatform] = useState<Platform | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isSearching, setIsSearching] = useState<boolean>(false);
   const [region, setRegion] = useState<Region>({
     iso_3166_1: "HU",
     english_name: "Hungary",
   });
 
+  const { searchQuery, isSearching, setIsSearching } = useSearch(); // Accessing search context
+
   const filterData = useTvShows(genres, region, platform);
   const quickSearchData = useQuickSearch(searchQuery);
 
   const tvShowsData = isSearching ? quickSearchData : filterData;
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setIsSearching(true);
-  };
 
   const handleApply = () => {
     setIsSearching(false);
@@ -43,40 +42,47 @@ function App() {
   };
 
   return (
-    <DarkModeProvider>
-      <div className="flex flex-col h-screen">
-        <NavBar onSearch={handleSearch} />
-        <div className="flex-grow flex overflow-auto">
-          <aside className="hidden sm:block w-52 p-4">
-            <GenreList onApply={handleApply} onSelectGenres={setGenres} />
-          </aside>
-          <main className="flex-grow p-4 overflow-auto">
-            <TvShowHeading
-              searchQuery={searchQuery}
-              isSearching={isSearching}
-              platform={platform}
-              genres={genres}
-              region={region}
+    <div className="flex flex-col h-screen">
+      <NavBar />
+      <div className="flex-grow flex overflow-auto">
+        <aside className="hidden sm:block w-52 p-4">
+          <GenreList onApply={handleApply} onSelectGenres={setGenres} />
+        </aside>
+        <main className="flex-grow p-4 overflow-auto">
+          <TvShowHeading
+            searchQuery={searchQuery}
+            isSearching={isSearching}
+            platform={platform}
+            genres={genres}
+            region={region}
+          />
+          <div>
+            <PlatformSelector
+              watch_region={region.iso_3166_1}
+              onApply={handleApply}
+              selectedPlatform={platform}
+              onSelectPlatform={setPlatform}
             />
-            <div>
-              <PlatformSelector
-                watch_region={region.iso_3166_1}
-                onApply={handleApply}
-                selectedPlatform={platform}
-                onSelectPlatform={setPlatform}
-              />
-              <RegionSelector
-                onApply={handleRegionApply}
-                selectedRegion={region}
-                onSelectedRegion={setRegion}
-              />
-            </div>
-            <TvShowGrid selectedPlatform={platform} tvShowsData={tvShowsData} />
-          </main>
-        </div>
+            <RegionSelector
+              onApply={handleRegionApply}
+              selectedRegion={region}
+              onSelectedRegion={setRegion}
+            />
+          </div>
+          <TvShowGrid selectedPlatform={platform} tvShowsData={tvShowsData} />
+        </main>
       </div>
-    </DarkModeProvider>
+    </div>
   );
 }
 
-export default App;
+// Wrap App component in both DarkModeProvider and SearchProvider
+export default function WrappedApp() {
+  return (
+    <SearchProvider>
+      <DarkModeProvider>
+        <App />
+      </DarkModeProvider>
+    </SearchProvider>
+  );
+}
