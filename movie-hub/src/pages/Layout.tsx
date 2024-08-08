@@ -1,13 +1,17 @@
+// src/components/Layout.tsx
+
 import React from "react";
-import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
+import NavBar from "../components/NavBar";
 
 const Layout = () => {
   return (
-    <>
-      <NavBar></NavBar>
-      <Outlet></Outlet>
-    </>
+    <div className="flex flex-col h-screen">
+      <NavBar />
+      <div className="flex-grow flex overflow-auto">
+        <Outlet />
+      </div>
+    </div>
   );
 };
 
