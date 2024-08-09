@@ -1,5 +1,5 @@
 import { TvShow } from "../hooks/useTvShows";
-import placeholderImage from "../assets/logo.webp"; // replace with the actual path to your placeholder image
+import placeholderImage from "../assets/logo.webp";
 import Rating from "./Rating";
 import { Link } from "react-router-dom";
 
