@@ -1,8 +1,4 @@
-// src/pages/AnotherPage.tsx
-
-import React from "react";
-
-const AnotherPage = () => {
+const TestPage = () => {
   return (
     <div className="p-4">
       <h1>Another Page</h1>
@@ -11,4 +7,4 @@ const AnotherPage = () => {
   );
 };
 
-export default AnotherPage;
+export default TestPage;
