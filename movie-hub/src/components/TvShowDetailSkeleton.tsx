@@ -2,7 +2,7 @@ import React from "react";
 
 const TvShowDetailSkeleton = () => {
   return (
-    <div className="p-6 max-w-5xl w-[500px] lg:w-[950px] md:w-[700px] sm:w-[300px] animate-pulse">
+    <div className="p-6 max-w-5xl w-[330px] lg:w-[950px] md:w-[700px] sm:w-[500px] animate-pulse">
       {/* Placeholder for the backdrop */}
       <div className="relative h-96 mb-6 overflow-hidden bg-gray-700 rounded-lg">
         <div className="absolute inset-0 bg-gray-300"></div>

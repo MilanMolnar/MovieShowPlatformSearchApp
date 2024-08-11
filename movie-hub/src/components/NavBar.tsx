@@ -23,22 +23,30 @@ const NavBar = () => {
   const logoSrc = `${logo}?timestamp=${Date.now()}`;
 
   return (
-    <nav className="flex flex-col md:flex-row items-center bg-gray-100 dark:bg-gray-900">
-      <Link to={"/"} className="mb-4 md:mb-0">
-        <img
-          src={logoSrc}
-          alt="logo"
-          className="w-24 h-auto md:w-20 md:h-20 shadow"
-        />
-      </Link>
-      <div className="flex flex-col md:flex-row justify-between w-full">
-        <SearchBox />
-        <ul id="right-nav" className="flex items-center space-x-6 mt-4 md:mt-0">
+    <nav className="flex flex-col md:flex-row items-center justify-between bg-gray-100 dark:bg-gray-900">
+      <div className="w-full md:w-auto flex justify-between items-center mb-4 md:mb-0">
+        <Link to={"/"} className="md:mr-4">
+          <img
+            src={logoSrc}
+            alt="logo"
+            className="w-24 min-w-20 h-auto md:w-20 md:h-20 shadow"
+          />
+        </Link>
+        <div className="flex md:hidden items-center space-x-4 mr-5">
           <ColorModeSwitch />
-          <li className="text-base text-gray-800 dark:text-gray-200">
+          <span className="text-base text-gray-800 dark:text-gray-200">
             Profile
-          </li>
-        </ul>
+          </span>
+        </div>
+      </div>
+      <div className="w-full mb-4 md:mb-0 mr-5">
+        <SearchBox />
+      </div>
+      <div className="hidden md:flex items-center space-x-6 mr-5 sm:mr-5">
+        <ColorModeSwitch />
+        <span className="text-base text-gray-800 dark:text-gray-200 ">
+          Profile
+        </span>
       </div>
     </nav>
   );
