@@ -4,6 +4,7 @@ import logoDark from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
 import { useDarkMode } from "../providers/DarkmodeContextProvider";
 import SearchBox from "./SearchBox";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const { darkMode } = useDarkMode();
@@ -21,24 +22,22 @@ const NavBar = () => {
   // Add a timestamp to the logo URL to bypass the cache
   const logoSrc = `${logo}?timestamp=${Date.now()}`;
 
-  const handleLogoClick = () => {
-    // Refresh the page
-    window.location.reload();
-  };
-
   return (
-    <nav className="flex items-start bg-gray-100 dark:bg-gray-900">
-      <img
-        src={logoSrc}
-        onClick={handleLogoClick}
-        alt="logo"
-        className="w-20 h-20 shadow"
-      />
-      <div className="px-8 py-6 flex justify-between w-full">
+    <nav className="flex flex-col md:flex-row items-center bg-gray-100 dark:bg-gray-900">
+      <Link to={"/"} className="mb-4 md:mb-0">
+        <img
+          src={logoSrc}
+          alt="logo"
+          className="w-24 h-auto md:w-20 md:h-20 shadow"
+        />
+      </Link>
+      <div className="flex flex-col md:flex-row justify-between w-full">
         <SearchBox />
-        <ul id="right-nav" className="flex px-2">
+        <ul id="right-nav" className="flex items-center space-x-6 mt-4 md:mt-0">
           <ColorModeSwitch />
-          <li className="px-6 mt-1">Profile</li>
+          <li className="text-base text-gray-800 dark:text-gray-200">
+            Profile
+          </li>
         </ul>
       </div>
     </nav>

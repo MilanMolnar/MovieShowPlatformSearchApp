@@ -11,7 +11,7 @@ const SearchBox = () => {
   };
 
   return (
-    <div className="flex w-96 bg-gray-100 dark:bg-gray-800 rounded-md">
+    <div className="flex lg:w-[500px] md:w-[500px] ml-5 bg-gray-100 dark:bg-gray-800 rounded-md">
       <input
         className="w-full px-4 py-1 text-gray-700 dark:text-gray-300 rounded-l-md bg-gray-300 dark:bg-gray-800 focus:outline-none focus:bg-white dark:focus:bg-gray-700"
         type="text"
