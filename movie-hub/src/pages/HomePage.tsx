@@ -56,6 +56,7 @@ const HomePage = () => {
             selectedPlatform={platform}
             onSelectPlatform={setPlatform}
           />
+
           <RegionSelector
             onApply={handleRegionApply}
             selectedRegion={region}

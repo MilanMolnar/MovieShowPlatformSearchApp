@@ -53,7 +53,7 @@ const RegionSelector = ({
   }
 
   return (
-    <div className="relative inline-block text-left ml-4">
+    <div className="relative inline-block text-left ml-4 mt-2 md:mt-0">
       <div>
         <button
           type="button"
