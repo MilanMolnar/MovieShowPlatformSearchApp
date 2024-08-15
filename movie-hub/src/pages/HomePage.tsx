@@ -39,7 +39,7 @@ const HomePage = () => {
   return (
     <div className="flex-grow flex overflow-auto">
       <aside className="hidden sm:block w-52 p-4">
-        <GenreList onApply={handleApply} onSelectGenres={setGenres} />
+        <GenreList onSelectGenres={setGenres} />
       </aside>
       <main className="flex-grow p-4 overflow-auto">
         <TvShowHeading

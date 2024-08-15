@@ -1,13 +1,42 @@
-import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaSearch, FaTimes } from "react-icons/fa";
 import { useSearch } from "../providers/SearchmodeContextProvider";
+import { useNavigate } from "react-router-dom";
 
 const SearchBox = () => {
   const [inputValue, setInputValue] = useState("");
-  const { handleSearch } = useSearch();
+  const { handleSearch, setIsSearching } = useSearch();
+  const navigate = useNavigate(); // React Router's navigation hook
+
+  useEffect(() => {
+    if (inputValue !== "") {
+      handleSearch(inputValue);
+      setIsSearching(true);
+    } else {
+      setIsSearching(false);
+    }
+  }, [inputValue, handleSearch, setIsSearching]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
+  };
+
+  const handleClear = () => {
+    setInputValue("");
+    setIsSearching(false);
+  };
+
+  const handleSearchSubmit = () => {
+    if (inputValue) {
+      handleSearch(inputValue);
+      navigate("/"); // Redirect to the homepage
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearchSubmit();
+    }
   };
 
   return (
@@ -18,14 +47,17 @@ const SearchBox = () => {
         placeholder="Search..."
         value={inputValue}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown} // Trigger search on Enter key press
       />
       <button
-        onClick={() => {
-          if (inputValue) {
-            handleSearch(inputValue);
-          }
-        }}
-        className=" px-4 font-bold text-white bg-blue-500 rounded-r-md hover:bg-blue-600 dark:bg-gray-600 dark:hover:bg-gray-500"
+        onClick={handleClear}
+        className="px-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+      >
+        <FaTimes />
+      </button>
+      <button
+        onClick={handleSearchSubmit} // Trigger search and navigate on icon click
+        className="px-4 font-bold text-white bg-blue-500 rounded-r-md hover:bg-blue-600 dark:bg-gray-600 dark:hover:bg-gray-500"
       >
         <FaSearch />
       </button>
