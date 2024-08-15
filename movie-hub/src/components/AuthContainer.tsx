@@ -6,7 +6,7 @@ import {
 } from "@react-oauth/google";
 import { useAuth } from "../providers/AuthContextProvider";
 
-const CLIENT_ID = "";
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_ID || "";
 
 interface UserProfile {
   email: string;
