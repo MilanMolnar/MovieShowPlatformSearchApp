@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 google.json
 node_modules
+*google*
 dist
 dist-ssr
 *.local
