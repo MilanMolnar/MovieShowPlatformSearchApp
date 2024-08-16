@@ -2,7 +2,7 @@ import React from "react";
 
 const SeasonDetailSkeleton = () => {
   return (
-    <div className="p-6 max-w-5xl w-[330px] lg:w-[1000px] md:w-[700px] sm:w-[500px]animate-pulse">
+    <div className="max-w-5xl w-[330px] lg:w-[1000px] md:w-[700px] sm:w-[500px] animate-pulse">
       {/* Placeholder for the Season Title */}
       <div className="h-8 bg-gray-600 rounded w-1/2 mb-4"></div>
 

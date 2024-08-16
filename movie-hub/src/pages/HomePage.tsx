@@ -11,6 +11,7 @@ import { Genre } from "../hooks/useGenres";
 import { Platform } from "../hooks/usePlatforms";
 import { Region } from "../hooks/useRegions";
 import CookieConsent from "../components/CookieConsent"; // Import the CookieConsent component
+import "../App.css";
 
 const HomePage = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -50,12 +51,12 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex-grow flex flex-col overflow-hidden">
+    <div className="flex-grow flex flex-col no-scrollbar">
       <div className="flex-grow flex overflow-auto">
         <aside className="hidden sm:block w-52 p-4">
           <GenreList onSelectGenres={setGenres} />
         </aside>
-        <main className="flex-grow p-4 overflow-auto">
+        <main className="flex-grow p-4 overflow-auto no-scrollbar">
           <TvShowHeading
             searchQuery={searchQuery}
             isSearching={isSearching}

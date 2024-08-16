@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useGenres, { Genre } from "../hooks/useGenres";
 import Spinner from "./Spinner";
+import TMDBComply from "./TMDBComply";
 
 interface Props {
   onSelectGenres: (genres: Genre[]) => void;
@@ -37,7 +38,7 @@ const GenreList = ({ onSelectGenres }: Props) => {
 
   return (
     <>
-      <div className="flex justify-center mt-9">
+      <div className="flex justify-center mt-9 overflow-hidden">
         <p
           className={`text-3xl font-bold text-center mt-[9px] mx-4 mb-4 ${
             selectedGenres.length > 0
@@ -56,7 +57,7 @@ const GenreList = ({ onSelectGenres }: Props) => {
               selectedGenres.find((g) => g.id === genre.id)
                 ? "bg-blue-300  dark:bg-gray-600 dark:text-white"
                 : ""
-            } dark:text-gray-300 rounded-lg transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105 `}
+            } dark:text-gray-300 rounded-lg transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-[102%] `}
             onClick={() => handleGenreClick(genre)}
           >
             {genre.name}
@@ -73,6 +74,7 @@ const GenreList = ({ onSelectGenres }: Props) => {
           </button>
         </div>
       )}
+      <TMDBComply />
     </>
   );
 };

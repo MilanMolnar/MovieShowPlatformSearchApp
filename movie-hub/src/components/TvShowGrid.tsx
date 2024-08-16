@@ -1,24 +1,34 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Platform } from "../hooks/usePlatforms";
 import { TvShow } from "../hooks/useTvShows";
 import TvShowCard from "./TvShowCard";
 import Spinner from "./Spinner";
 import TvShowSkeleton from "./TvShowSkeleton";
+import { PersistentOutline } from "./PersistentOutline";
 import "../App.css";
 
+interface TvShowsData {
+  data: TvShow[];
+  error: string;
+  isLoading: boolean;
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+}
+
 interface Props {
-  tvShowsData: {
-    data: TvShow[];
-    error: string;
-    isLoading: boolean;
-    fetchNextPage?: () => void;
-    hasNextPage?: boolean;
-    isFetchingNextPage?: boolean;
-  };
+  tvShowsData: TvShowsData;
   selectedPlatform: Platform | null;
 }
 
-const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
+interface OutlinePosition {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+const TvShowGrid: React.FC<Props> = ({ tvShowsData, selectedPlatform }) => {
   const {
     data,
     error,
@@ -27,11 +37,14 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
     hasNextPage,
     isFetchingNextPage,
   } = tvShowsData;
-  const observerTarget = useRef<HTMLDivElement | null>(null);
-  const [showScrollToTop, setShowScrollToTop] = useState(false);
-  const skeletonCount = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-  ];
+  const observerTarget = useRef<HTMLDivElement>(null);
+  const [showScrollToTop, setShowScrollToTop] = useState<boolean>(false);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const skeletonCount = Array.from({ length: 17 }, (_, i) => i + 1);
+
+  const [outlinePosition, setOutlinePosition] =
+    useState<OutlinePosition | null>(null);
+  const [scaleFactor, setScaleFactor] = useState<number>(1);
 
   useEffect(() => {
     if (!fetchNextPage || !hasNextPage) return;
@@ -68,18 +81,65 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
     }
   };
 
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const handleCardHover = (
+    event: React.MouseEvent<HTMLDivElement>,
+    tvShowId: number
+  ) => {
+    const card = event.currentTarget.querySelector(
+      ".card-inner"
+    ) as HTMLElement;
+    if (card && gridRef.current) {
+      const cardRect = card.getBoundingClientRect();
+      const gridRect = gridRef.current.getBoundingClientRect();
+
+      setOutlinePosition({
+        top: cardRect.top - gridRect.top + 3.3,
+        left: cardRect.left - gridRect.left - 4.5,
+        width: cardRect.width + 9,
+        height: cardRect.height + 9,
+      });
+
+      // Scale the outline when hovered
+      setScaleFactor(1.04);
+      setHoveredCard(tvShowId);
+    }
+  };
+
+  const handleCardLeave = () => {
+    // Reset the outline when not hovered
+    setHoveredCard(null);
+    setScaleFactor(1); // Reset to original scale
+  };
+
   return (
-    <div className="relative">
-      {" "}
-      {/* Add this wrapper div */}
+    <div className="relative overflow-hidden">
+      {outlinePosition && (
+        <PersistentOutline
+          position={outlinePosition}
+          scaleFactor={scaleFactor}
+        />
+      )}
       {error && <div>{error}</div>}
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-1 mt-2">
+      <div
+        ref={gridRef}
+        className="grid lg:grid-cols-3 lm:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-1 mt-2 overflow-hidden"
+      >
         {isLoading &&
           skeletonCount.map((skeleton) => <TvShowSkeleton key={skeleton} />)}
         {data.length === 0 && !isLoading ? (
           <div className="text-2xl ml-4 my-2 w-full">No Tv Shows Found</div>
         ) : (
-          data.map((tvShow) => <TvShowCard key={tvShow.id} tvShow={tvShow} />)
+          data.map((tvShow) => (
+            <div
+              key={tvShow.id}
+              onMouseEnter={(e) => handleCardHover(e, tvShow.id)}
+              onMouseLeave={handleCardLeave}
+            >
+              <TvShowCard tvShow={tvShow} />
+            </div>
+          ))
         )}
       </div>
       {isFetchingNextPage && <Spinner />}

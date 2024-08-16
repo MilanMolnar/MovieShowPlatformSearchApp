@@ -9,6 +9,9 @@ export default {
         blur: "blur(20px)",
         lg: "blur(40px)",
       },
+      screens: {
+        lm: "1450px", // Between md and lg
+      },
     },
   },
   variants: {

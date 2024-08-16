@@ -11,7 +11,9 @@ const CookieConsent: React.FC<Props> = ({ onAccept }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white p-4 flex flex-col sm:flex-row justify-between items-center z-50">
       <div className="flex items-center mb-2 sm:mb-0">
-        <img src={TMDBLogo} alt="TMDB Logo" className="h-8 mr-2" />
+        <a href="https://www.themoviedb.org/">
+          <img src={TMDBLogo} alt="TMDB Logo" className="h-8 mr-2" />
+        </a>
         <span className="text-sm">
           This application proudly uses the TMDB API in accordance with their
           fair use policy. Please note that we are not affiliated with TMDB. We
