@@ -27,3 +27,22 @@ body {
 .no-scroll {
   overflow: hidden; /* Disables both horizontal and vertical scrolling */
 }
+/* Custom scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Make the scrollbar thin */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(36, 36, 46); /* Make the scrollbar black */
+  border-radius: 10px; /* Round edges of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent; /* Make the track transparent */
+}
+
+/* Custom scrollbar for Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Make the scrollbar thin */
+  scrollbar-color: rgb(26, 26, 36) transparent; /* Make the scrollbar black with transparent track */
+}

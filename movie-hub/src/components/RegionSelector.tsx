@@ -15,6 +15,12 @@ const RegionSelector = ({
 }: Props) => {
   const { data, error, isLoading } = useRegions();
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter regions based on the search query
+  const filteredRegions = data?.filter((region) =>
+    region.english_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (isLoading) {
     return (
@@ -26,7 +32,7 @@ const RegionSelector = ({
         aria-expanded="true"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex  justify-between w-full">
+        <div className="flex justify-between w-full">
           <div className="">Loading...</div>
           <FaCaretDown size={20} />
         </div>
@@ -38,13 +44,13 @@ const RegionSelector = ({
     return (
       <button
         type="button"
-        className="inline-flex ml-4 justify-center w-56 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+        className="inline-flex ml-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
         id="options-menu"
         aria-haspopup="true"
         aria-expanded="true"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex  justify-between w-full">
+        <div className="flex justify-between w-full">
           <div className="">Error in region request.</div>
           <FaCaretDown size={20} />
         </div>
@@ -73,14 +79,25 @@ const RegionSelector = ({
       </div>
 
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-60 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 max-h-[440px] overflow-auto z-50">
+        <div className="origin-top-right absolute right-0 mt-2 w-60 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 max-h-[440px] overflow-auto custom-scrollbar z-50">
+          {/* Search bar */}
+          <div className="p-2">
+            <input
+              type="text"
+              placeholder="Search regions..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
           <div
             className="py-1"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            {data?.map((region) => (
+            {filteredRegions?.map((region) => (
               <a
                 key={region.iso_3166_1}
                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-900"
@@ -94,6 +111,11 @@ const RegionSelector = ({
                 {region.english_name}
               </a>
             ))}
+            {filteredRegions?.length === 0 && (
+              <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                No regions found
+              </div>
+            )}
           </div>
         </div>
       )}
