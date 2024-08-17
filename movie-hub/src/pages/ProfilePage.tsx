@@ -18,7 +18,7 @@ const ProfilePage = () => {
       </div>
       {/* Conditionally render BadgeScene only if user is logged in */}
       {userProfile && (
-        <div className="flex-1 -mt-4 md:p-0">
+        <div className="flex-1 md:h-auto h-[60vh] flex justify-center items-center md:items-start pt-80 md:pt-0 ">
           <BadgeScene
             userEmail={userProfile.email}
             userName={userProfile.name}
