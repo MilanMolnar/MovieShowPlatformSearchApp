@@ -72,14 +72,19 @@ const AuthContainer: React.FC = () => {
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <div className="flex items-center justify-center">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-10 sm:max-w-sm md:max-w-lg lg:max-w-xl w-full transform transition-transform hover:scale-105">
+        <div
+          className={`bg-white dark:bg-gray-800 rounded-lg shadow-xl p-10  sm:max-w-sm md:max-w-lg lg:max-w-xl w-full transform transition-transform ${
+            !userProfile && "lg:p-20"
+          }`}
+        >
           <h2 className="text-3xl font-semibold text-center text-gray-900 dark:text-white mb-8">
-            Account
+            {" "}
+            {userProfile ? "Account" : "Sign in"}
           </h2>
           {!userProfile ? (
             <div className="text-center">
               <p className="text-gray-600 dark:text-gray-300 mb-8">
-                Please log in to continue
+                Use your google account to sign in.
               </p>
               <GoogleLogin
                 onSuccess={handleLoginSuccess}

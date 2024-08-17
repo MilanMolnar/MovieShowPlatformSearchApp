@@ -18,6 +18,15 @@ import {
 } from "@react-three/rapier";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import textureImage from "../assets/favicon.png"; // Path to your texture image
+import { useDarkMode } from "../providers/DarkmodeContextProvider";
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      meshLineGeometry: any;
+      meshLineMaterial: any;
+    }
+  }
+}
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 useGLTF.preload(
@@ -49,7 +58,6 @@ export default function BadgeScene({
         />
       </Physics>
       <Environment background blur={0.75}>
-        <color attach="background" args={["#2D313B"]} />
         <Lightformer
           intensity={2}
           color="white"
@@ -90,12 +98,14 @@ function Band({
   userEmail,
   userPicture,
 }: BandProps) {
+  const { darkMode } = useDarkMode();
+  const bandColor = darkMode ? "#1b2036" : "#aaa";
   const band = useRef<THREE.Mesh>(null);
-  const fixed = useRef<RigidBody>(null);
-  const j1 = useRef<RigidBody>(null);
-  const j2 = useRef<RigidBody>(null);
-  const j3 = useRef<RigidBody>(null);
-  const card = useRef<RigidBody>(null);
+  const fixed = useRef<any>(null);
+  const j1 = useRef<any>(null);
+  const j2 = useRef<any>(null);
+  const j3 = useRef<any>(null);
+  const card = useRef<any>(null);
   const carabiner = useRef<THREE.Mesh>(null);
 
   const vec = new THREE.Vector3();
@@ -105,14 +115,14 @@ function Band({
   const segmentProps = {
     type: "dynamic" as const,
     canSleep: true,
-    colliders: false,
+    colliders: false as any,
     angularDamping: 2,
     linearDamping: 2,
   };
   const { nodes, materials } = useGLTF(
     "https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5huRVDzcoDwnbgrKUo1Lzs/53b6dd7d6b4ffcdbd338fa60265949e1/tag.glb"
   ) as any;
-  const profileTexture = useTexture(userPicture);
+  const profileTexture = useTexture(userPicture || textureImage);
 
   // Adjust texture mapping
   profileTexture.wrapS = THREE.RepeatWrapping;
@@ -166,33 +176,38 @@ function Band({
       [j1, j2].forEach((ref) => {
         if (!ref.current!.lerped)
           ref.current!.lerped = new THREE.Vector3().copy(
-            ref.current!.translation()
+            ref.current!.translation() as THREE.Vector3
           );
         const clampedDistance = Math.max(
           0.1,
           Math.min(
             1,
-            ref.current!.lerped.distanceTo(ref.current!.translation())
+            ref.current!.lerped.distanceTo(
+              ref.current!.translation() as THREE.Vector3
+            )
           )
         );
         ref.current!.lerped.lerp(
-          ref.current!.translation(),
+          ref.current!.translation() as THREE.Vector3,
           delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
         );
       });
-      curve.points[0].copy(j3.current!.translation());
+      curve.points[0].copy(j3.current!.translation() as THREE.Vector3);
       curve.points[1].copy(j2.current!.lerped);
       curve.points[2].copy(j1.current!.lerped);
-      curve.points[3].copy(fixed.current!.translation());
-      band.current!.geometry.setPoints(curve.getPoints(32));
+      curve.points[3].copy(fixed.current!.translation() as THREE.Vector3);
+      (band.current!.geometry as MeshLineGeometry).setPoints(
+        curve.getPoints(32)
+      );
 
-      ang.copy(card.current!.angvel());
-      rot.copy(card.current!.rotation());
+      ang.copy(card.current!.angvel() as THREE.Vector3);
+      rot.copy(card.current!.rotation() as THREE.Vector3);
       card.current!.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
     }
   });
 
   curve.curveType = "chordal";
+  let names = userName?.split(" ") || ["Name1", "Name2"];
 
   return (
     <>
@@ -220,15 +235,15 @@ function Band({
             onPointerOver={() => setHovered(true)}
             onPointerOut={() => setHovered(false)}
             onPointerUp={(e) => {
-              e.target.releasePointerCapture(e.pointerId);
+              (e.target as HTMLElement).releasePointerCapture(e.pointerId);
               setDragged(false);
             }}
             onPointerDown={(e) => {
-              e.target.setPointerCapture(e.pointerId);
+              (e.target as HTMLElement).setPointerCapture(e.pointerId);
               setDragged(
                 new THREE.Vector3()
                   .copy(e.point)
-                  .sub(vec.copy(card.current!.translation()))
+                  .sub(vec.copy(card.current!.translation() as THREE.Vector3))
               );
             }}
           >
@@ -243,7 +258,7 @@ function Band({
               <meshStandardMaterial color="gray" />
             </mesh>
             <mesh geometry={nodes.card.geometry}>
-              <meshStandardMaterial color="black" />
+              <meshStandardMaterial color="#fff" />
             </mesh>
             <mesh
               geometry={nodes.clip.geometry}
@@ -254,51 +269,62 @@ function Band({
             {/* Profile Picture */}
             <mesh
               position={[0, 0.6, 0.01]} // Adjust the position as needed
-              scale={[0.4, 0.4, 1]} // Adjust the scale as needed
+              scale={[0.35, 0.35, 1]} // Adjust the scale as needed
             >
               <planeGeometry args={[1, 1]} />
               <meshStandardMaterial map={profileTexture} />
             </mesh>
+
             {/* 3D Text Component */}
+            <Text
+              position={[0, 0.85, 0.009]} // Adjust the position as needed
+              fontSize={0.06} // Adjust the font size
+              color="black" // Adjust the color
+              anchorX="center" // Align text starting from the left
+              anchorY="middle" // Vertical alignment
+              rotation={[0, 0, 0]} // Rotate text if needed
+            >
+              {`V I S I T O R   P A S S`}
+            </Text>
             <Text
               position={[-0.186, 0.98, 0.009]} // Adjust the position as needed
               fontSize={0.04} // Adjust the font size
-              color="white" // Adjust the color
-              anchorX="center"
-              anchorY="middle"
+              color="gray" // Adjust the color
+              anchorX="center" // Align text starting from the left
+              anchorY="middle" // Vertical alignment
               rotation={[0, 0, 0]} // Rotate text if needed
             >
               Discover Shows
             </Text>
             <Text
-              position={[0, 0.27, 0.009]} // Adjust the position as needed
-              fontSize={0.04} // Adjust the font size
-              color="white" // Adjust the color
-              anchorX="center"
-              anchorY="middle"
+              position={[0, 0.3, 0.009]} // Adjust the position as needed
+              fontSize={0.0659} // Adjust the font size
+              color="black" // Adjust the color
+              anchorX="center" // Align text starting from the left
+              anchorY="middle" // Vertical alignment
               rotation={[0, 0, 0]} // Rotate text if needed
             >
-              {`Name: ${userName || "Your Name"}`}
+              {names[0]}
             </Text>
             <Text
-              position={[0, 0.2, 0.009]} // Adjust the position as needed
-              fontSize={0.04} // Adjust the font size
-              color="white" // Adjust the color
-              anchorX="center"
-              anchorY="middle"
+              position={[0, 0.21, 0.009]} // Adjust the position as needed
+              fontSize={0.0659} // Adjust the font size
+              color="black" // Adjust the color
+              anchorX="center" // Align text starting from the left
+              anchorY="middle" // Vertical alignment
               rotation={[0, 0, 0]} // Rotate text if needed
             >
-              {`Email:  ${userEmail || "email@email.email"}`}
+              {names[1]}
             </Text>
             <Text
-              position={[0, 0.13, 0.009]} // Adjust the position as needed
-              fontSize={0.04} // Adjust the font size
-              color="white" // Adjust the color
-              anchorX="center"
-              anchorY="middle"
+              position={[0, 0.079, 0.009]} // Adjust the position as needed
+              fontSize={0.042} // Adjust the font size
+              color="gray" // Adjust the color
+              anchorX="center" // Align text starting from the left
+              anchorY="middle" // Vertical alignment
               rotation={[0, 0, 0]} // Rotate text if needed
             >
-              {`Status:  Visitor`}
+              {userEmail || "email@email.email"}
             </Text>
           </group>
         </RigidBody>
@@ -307,7 +333,7 @@ function Band({
       <mesh ref={band}>
         <meshLineGeometry />
         <meshLineMaterial
-          color="#1a202c"
+          color={bandColor}
           depthTest={false}
           resolution={[width, height]}
           repeat={[0.25, 0.25]} // Adjust these values to fit the texture properly
