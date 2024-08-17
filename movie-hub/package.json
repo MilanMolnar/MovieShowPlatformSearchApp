@@ -10,17 +10,23 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
+    "@react-three/cannon": "^6.6.0",
+    "@react-three/drei": "^9.111.0",
+    "@react-three/fiber": "^8.17.5",
+    "@react-three/rapier": "^1.4.0",
     "@tanstack/react-query": "^5.51.15",
     "@tanstack/react-query-devtools": "^5.51.15",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "gapi-script": "^1.2.0",
     "jwt-decode": "^4.0.0",
+    "leva": "^0.9.35",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.26.0",
-    "tailwind-scrollbar": "^3.1.0"
+    "tailwind-scrollbar": "^3.1.0",
+    "three": "^0.167.1"
   },
   "devDependencies": {
     "@types/node": "^22.3.0",
