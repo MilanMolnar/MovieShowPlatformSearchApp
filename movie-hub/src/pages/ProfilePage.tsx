@@ -13,12 +13,16 @@ const ProfilePage = () => {
         !userProfile ? "justify-center" : "flex-col md:flex-row"
       }`}
     >
-      <div className={`p-4 ${!userProfile ? "pt-36" : "md:pl-20 pt-36"}`}>
+      <div
+        className={`p-4 z-50  ${
+          !userProfile ? "pt-36" : "md:pl-20 pt-10 md:pt-36"
+        }`}
+      >
         <AuthContainer />
       </div>
       {/* Conditionally render BadgeScene only if user is logged in */}
       {userProfile && (
-        <div className="flex-1 md:h-auto h-[60vh] flex justify-center items-center md:items-start pt-80 md:pt-0 ">
+        <div className="flex-1  h-[50vh]  flex justify-center items-center md:items-start pt-60 md:pt-0 z-0 ">
           <BadgeScene
             userEmail={userProfile.email}
             userName={userProfile.name}
