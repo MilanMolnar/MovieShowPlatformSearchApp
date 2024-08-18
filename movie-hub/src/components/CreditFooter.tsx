@@ -2,7 +2,7 @@ import TMDBLogo from "../assets/TMDB.svg";
 
 const CreditFooter = () => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-opacity-0 pointer-events-none dark:text-gray-200 p-4 flex flex-col sm:flex-row  items-center z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-opacity-0 hidden sm:flex pointer-events-none dark:text-gray-200 p-4 flex flex-col sm:flex-row  items-center z-50">
       <div className="flex items-center mb-2 sm:mb-0  ml-5">
         <span className="text-m select-none">
           This Badge animation was made possible by Paul Henschel's Blog about
