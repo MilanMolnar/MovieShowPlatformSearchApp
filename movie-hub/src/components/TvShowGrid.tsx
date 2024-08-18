@@ -6,6 +6,7 @@ import Spinner from "./Spinner";
 import TvShowSkeleton from "./TvShowSkeleton";
 import { PersistentOutline } from "./PersistentOutline";
 import "../App.css";
+import { Region } from "../hooks/useRegions";
 
 interface TvShowsData {
   data: TvShow[];

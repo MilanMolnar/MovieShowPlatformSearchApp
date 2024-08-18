@@ -40,7 +40,7 @@ const GenreList = ({ onSelectGenres }: Props) => {
     <>
       <div className="flex justify-center mt-9 overflow-hidden">
         <p
-          className={`text-3xl font-bold text-center mt-[9px] mx-4 mb-4 ${
+          className={`text-3xl select-none font-bold text-center mt-[9px] mx-4 mb-4 ${
             selectedGenres.length > 0
               ? "text-gray-900 dark:text-gray-300 underline" // Lighter shade when at least one genre is selected
               : "text-gray-900 dark:text-gray-300 " // Default color when no genre is selected

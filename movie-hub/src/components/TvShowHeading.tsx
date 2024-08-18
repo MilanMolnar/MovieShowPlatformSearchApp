@@ -19,7 +19,7 @@ const TvShowHeading = ({
   region,
 }: Props) => {
   const headingStyle =
-    "text-3xl md:text-4xl font-bold ml-4 mt-10 mb-6 text-gray-900 dark:text-gray-300";
+    "text-3xl md:text-4xl select-none font-bold ml-4 mt-10 mb-6 text-gray-900 dark:text-gray-300";
   if (isSearching) {
     return <h1 className={headingStyle}>Result for: "{searchQuery}"</h1>;
   }
