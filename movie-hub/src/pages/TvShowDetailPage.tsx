@@ -10,11 +10,21 @@ import SeasonDetailSkeleton from "../components/TvShowSeasonDetailsSkeleton";
 import RegionSelector from "../components/RegionSelector";
 import SeasonSelector from "../components/SeasonSelector";
 import { useRegion } from "../providers/RegionContextProvider";
+import EpisodeDetails from "../components/EpisodeDetails";
+import { motion, AnimatePresence } from "framer-motion";
 
 const TvShowDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [season, setSeason] = useState<number>(1);
   const { region, setRegion } = useRegion();
+  const [expandedEpisode, setExpandedEpisode] = useState<number | null>(null);
+  const [hoveredEpisode, setHoveredEpisode] = useState<number | null>(null);
+
+  const toggleEpisode = (episodeNumber: number) => {
+    setExpandedEpisode(
+      expandedEpisode === episodeNumber ? null : episodeNumber
+    );
+  };
 
   // Fetch TV show details
   const { data: tvShowDetails, isLoading: isTvShowLoading } = useTvShowDetails(
@@ -151,7 +161,7 @@ const TvShowDetailPage = () => {
             </div>
 
             {/* Watch Providers */}
-            <div className="min-h-[200px]">
+            <div className="min-h-[100px] mb-5">
               {isProvidersLoading ? (
                 <ProvidersSkeleton />
               ) : isProvidersError ? (
@@ -190,7 +200,7 @@ const TvShowDetailPage = () => {
 
             {/* Season Details */}
             <div className="mb-5">
-              <h2 className="text-xl md:text-2xl font-semibold dark:text-white mb-4">
+              <h2 className="text-xl md:text-2xl font-semibold dark:text-white">
                 Season {season} Details:
               </h2>
               {isSeasonLoading ? (
@@ -221,25 +231,56 @@ const TvShowDetailPage = () => {
                     {seasonDetails.episodes.map((episode) => (
                       <li
                         key={episode.id}
-                        className="flex items-start space-x-2"
+                        className="flex flex-col space-y-2 pt-5"
                       >
-                        <div className="w-16 h-16 flex-shrink-0">
-                          {episode.still_path && (
-                            <img
-                              src={`https://image.tmdb.org/t/p/w154${episode.still_path}`}
-                              alt={episode.name}
-                              className="rounded"
+                        <div
+                          className="flex items-start space-x-2 cursor-pointer"
+                          onClick={() => toggleEpisode(episode.episode_number)}
+                        >
+                          <div
+                            className="w-20 h-20 flex-shrink-0 relative"
+                            onMouseEnter={() =>
+                              setHoveredEpisode(episode.episode_number)
+                            }
+                            onMouseLeave={() => setHoveredEpisode(null)}
+                          >
+                            {episode.still_path && (
+                              <img
+                                src={`https://image.tmdb.org/t/p/w154${episode.still_path}`}
+                                alt={episode.name}
+                                className={`rounded 
+                            ${
+                              hoveredEpisode === episode.episode_number
+                                ? "outline outline-3 outline-blue-400 dark:outline-gray-500"
+                                : ""
+                            }
+                            ${
+                              expandedEpisode === episode.episode_number
+                                ? "outline outline-3 outline-blue-700 dark:outline-white"
+                                : ""
+                            }
+                          `}
+                              />
+                            )}
+                          </div>
+                          <div>
+                            <h3 className="text-sm md:text-base font-semibold text-black dark:text-white">
+                              {episode.episode_number}. {episode.name}
+                            </h3>
+                            <p className="text-sm md:text-base text-black dark:text-gray-400">
+                              {episode.overview}
+                            </p>
+                          </div>
+                        </div>
+                        <AnimatePresence>
+                          {expandedEpisode === episode.episode_number && (
+                            <EpisodeDetails
+                              seriesId={Number(id)}
+                              seasonNumber={season}
+                              episodeNumber={episode.episode_number}
                             />
                           )}
-                        </div>
-                        <div>
-                          <h3 className="text-sm md:text-base font-semibold text-black dark:text-white">
-                            {episode.episode_number}. {episode.name}
-                          </h3>
-                          <p className="text-sm md:text-base text-black dark:text-gray-400">
-                            {episode.overview}
-                          </p>
-                        </div>
+                        </AnimatePresence>
                       </li>
                     ))}
                   </ul>
