@@ -12,15 +12,12 @@ import { Platform } from "../hooks/usePlatforms";
 import { Region } from "../hooks/useRegions";
 import CookieConsent from "../components/CookieConsent"; // Import the CookieConsent component
 import "../App.css";
+import { useRegion } from "../providers/RegionContextProvider";
 
 const HomePage = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [platform, setPlatform] = useState<Platform | null>(null);
-
-  const [region, setRegion] = useState<Region>({
-    iso_3166_1: "HU",
-    english_name: "Hungary",
-  });
+  const { region, setRegion } = useRegion();
   const [cookieConsent, setCookieConsent] = useState(false);
 
   const { searchQuery, isSearching, setIsSearching } = useSearch();

@@ -1,19 +1,20 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { Region } from "../hooks/useRegions"; // Import Region interface
 
-// Define the shape of the context value
 interface RegionContextType {
-  region: string;
-  setRegion: (region: string) => void;
+  region: Region;
+  setRegion: (region: Region) => void;
 }
 
-// Create the context with default values
 const RegionContext = createContext<RegionContextType | undefined>(undefined);
 
-// Create a provider component
 export const RegionProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [region, setRegion] = useState<string>("HU"); // Default region
+  const [region, setRegion] = useState<Region>({
+    iso_3166_1: "HU",
+    english_name: "Hungary",
+  });
 
   return (
     <RegionContext.Provider value={{ region, setRegion }}>
@@ -22,7 +23,6 @@ export const RegionProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-// Create a custom hook to use the context
 export const useRegion = (): RegionContextType => {
   const context = useContext(RegionContext);
   if (!context) {

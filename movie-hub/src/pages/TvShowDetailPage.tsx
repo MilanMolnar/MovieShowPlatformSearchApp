@@ -3,17 +3,18 @@ import { useParams } from "react-router-dom";
 import useProviders from "../hooks/useProviders";
 import useTvShowDetails from "../hooks/useTvShowDetails";
 import useSeasonDetails from "../hooks/useSeasonDetails";
-import useRegions from "../hooks/useRegions";
+import useRegions, { Region } from "../hooks/useRegions";
 import TvShowDetailSkeleton from "../components/TvShowDetailSkeleton";
 import ProvidersSkeleton from "../components/ProviderSkeleton";
 import SeasonDetailSkeleton from "../components/TvShowSeasonDetailsSkeleton";
 import RegionSelector from "../components/RegionSelector";
 import SeasonSelector from "../components/SeasonSelector";
+import { useRegion } from "../providers/RegionContextProvider";
 
 const TvShowDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [season, setSeason] = useState<number>(1);
-  const [region, setRegion] = useState<string>("HU");
+  const { region, setRegion } = useRegion();
 
   // Fetch TV show details
   const { data: tvShowDetails, isLoading: isTvShowLoading } = useTvShowDetails(
@@ -25,7 +26,7 @@ const TvShowDetailPage = () => {
     data: providers,
     isLoading: isProvidersLoading,
     isError: isProvidersError,
-  } = useProviders(Number(id), season, region);
+  } = useProviders(Number(id), season, region.iso_3166_1);
 
   // Fetch available regions
   const {
@@ -41,7 +42,7 @@ const TvShowDetailPage = () => {
     isError: isSeasonError,
   } = useSeasonDetails(Number(id), season);
 
-  const handleRegionChange = (region: string) => {
+  const handleRegionChange = (region: Region) => {
     setRegion(region);
   };
 
@@ -137,12 +138,8 @@ const TvShowDetailPage = () => {
             {/* Region and Season Selectors */}
             <div className="mb-6 grid gap-4 md:grid-cols-2">
               <RegionSelector
-                selectedRegion={
-                  regions?.find((r) => r.iso_3166_1 === region) || null
-                }
-                onSelectedRegion={(region) =>
-                  handleRegionChange(region.iso_3166_1)
-                }
+                selectedRegion={regions?.find((r) => r === region) || null}
+                onSelectedRegion={(region) => handleRegionChange(region)}
                 onApply={() => {}}
                 className="w-full"
               />
@@ -164,7 +161,7 @@ const TvShowDetailPage = () => {
               ) : Array.isArray(providers) && providers.length > 0 ? (
                 <div>
                   <h2 className="text-xl md:text-2xl font-semibold dark:text-white mb-4">
-                    Watch Providers for Season {season} in {region}:
+                    Watch Providers for Season {season} in {region.iso_3166_1}:
                   </h2>
                   <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {providers.map((provider) => (

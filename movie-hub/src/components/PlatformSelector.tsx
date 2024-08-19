@@ -125,7 +125,7 @@ const PlatformSelector = ({
             <div className="">
               {selectedPlatform
                 ? selectedPlatform?.provider_name
-                : "Streaming services"}
+                : "Streaming platforms"}
             </div>
             {isOpen ? <FaCaretUp size={20} /> : <FaCaretDown size={20} />}
           </div>
