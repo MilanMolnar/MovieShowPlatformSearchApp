@@ -6,7 +6,9 @@ import useSeasonDetails from "../hooks/useSeasonDetails";
 import useRegions from "../hooks/useRegions";
 import TvShowDetailSkeleton from "../components/TvShowDetailSkeleton";
 import ProvidersSkeleton from "../components/ProviderSkeleton";
-import SeasonDetailSkeleton from "../components/TvShowSeasonDetailsSkeleton"; // Assuming this is a loading skeleton for season details
+import SeasonDetailSkeleton from "../components/TvShowSeasonDetailsSkeleton";
+import RegionSelector from "../components/RegionSelector";
+import SeasonSelector from "../components/SeasonSelector";
 
 const TvShowDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,12 +41,12 @@ const TvShowDetailPage = () => {
     isError: isSeasonError,
   } = useSeasonDetails(Number(id), season);
 
-  const handleSeasonChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSeason(Number(event.target.value));
+  const handleRegionChange = (region: string) => {
+    setRegion(region);
   };
 
-  const handleRegionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setRegion(event.target.value);
+  const handleSeasonChange = (season: number) => {
+    setSeason(season);
   };
 
   return (
@@ -54,6 +56,7 @@ const TvShowDetailPage = () => {
       ) : (
         tvShowDetails && (
           <>
+            {/* TV Show Banner */}
             <div
               className="relative h-96 mb-6 w-[330px] lg:w-[950px] md:w-[700px] sm:w-[500px] overflow-hidden shadow-lg"
               style={{
@@ -73,6 +76,7 @@ const TvShowDetailPage = () => {
               </div>
             </div>
 
+            {/* TV Show Details */}
             <div className="mb-4 grid gap-4 md:grid-cols-2">
               <p className="text-sm md:text-base text-black dark:text-gray-400">
                 Genres:{" "}
@@ -130,49 +134,26 @@ const TvShowDetailPage = () => {
               </p>
             </div>
 
+            {/* Region and Season Selectors */}
             <div className="mb-6 grid gap-4 md:grid-cols-2">
-              <label className="block text-black dark:text-gray-400">
-                Region:
-                {isRegionsLoading ? (
-                  <div className="h-10 bg-gray-600 rounded w-full animate-pulse"></div>
-                ) : !isRegionsError && regions ? (
-                  <select
-                    value={region}
-                    onChange={handleRegionChange}
-                    className="block w-full mt-1 p-2 dark:bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:border-gray-500"
-                  >
-                    {regions.map((region) => (
-                      <option key={region.iso_3166_1} value={region.iso_3166_1}>
-                        {region.english_name}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  isRegionsError && (
-                    <p className="text-red-500">Failed to load regions</p>
-                  )
-                )}
-              </label>
-
-              <label className="block text-black dark:text-gray-400">
-                Season:
-                <select
-                  value={season}
-                  onChange={handleSeasonChange}
-                  className="block w-full mt-1 p-2 dark:bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:border-gray-500"
-                >
-                  {Array.from(
-                    { length: tvShowDetails.number_of_seasons },
-                    (_, i) => (
-                      <option key={i + 1} value={i + 1}>
-                        Season {i + 1}
-                      </option>
-                    )
-                  )}
-                </select>
-              </label>
+              <RegionSelector
+                selectedRegion={
+                  regions?.find((r) => r.iso_3166_1 === region) || null
+                }
+                onSelectedRegion={(region) =>
+                  handleRegionChange(region.iso_3166_1)
+                }
+                onApply={() => {}}
+                className="w-full"
+              />
+              <SeasonSelector
+                totalSeasons={tvShowDetails.number_of_seasons}
+                selectedSeason={season}
+                onSelectSeason={handleSeasonChange}
+              />
             </div>
 
+            {/* Watch Providers */}
             <div className="min-h-[200px]">
               {isProvidersLoading ? (
                 <ProvidersSkeleton />
@@ -210,6 +191,7 @@ const TvShowDetailPage = () => {
               )}
             </div>
 
+            {/* Season Details */}
             <div className="mb-5">
               <h2 className="text-xl md:text-2xl font-semibold dark:text-white mb-4">
                 Season {season} Details:
@@ -219,7 +201,7 @@ const TvShowDetailPage = () => {
               ) : isSeasonError ? (
                 <p className="text-red-500">Error loading season details.</p>
               ) : seasonDetails ? (
-                <div className=" pb-10 pt-5">
+                <div className="pb-10 pt-5">
                   <p className="text-sm md:text-base text-black dark:text-gray-400">
                     Overview:{" "}
                     <span className="dark:text-white text-zinc-700">
@@ -266,8 +248,8 @@ const TvShowDetailPage = () => {
                   </ul>
                 </div>
               ) : (
-                <p className="text-center text-lg">
-                  No details available for this season.
+                <p className="text-lg text-center">
+                  No season details available.
                 </p>
               )}
             </div>

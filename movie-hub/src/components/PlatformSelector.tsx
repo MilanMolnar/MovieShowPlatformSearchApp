@@ -77,7 +77,7 @@ const PlatformSelector = ({
     return (
       <button
         type="button"
-        className="inline-flex ml-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+        className="inline-flex ml-4 mr-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
         id="options-menu"
         aria-haspopup="true"
         aria-expanded="true"
@@ -94,7 +94,7 @@ const PlatformSelector = ({
     return (
       <button
         type="button"
-        className="inline-flex ml-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+        className="inline-flex ml-4 mr-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
         id="options-menu"
         aria-haspopup="true"
         aria-expanded="true"
@@ -109,7 +109,7 @@ const PlatformSelector = ({
 
   return (
     <div
-      className="relative inline-block text-left ml-4 mt-2 md:mt-0"
+      className="relative inline-block text-left ml-4 mr-4 mt-2 md:mt-0"
       ref={dropdownRef}
     >
       <div>

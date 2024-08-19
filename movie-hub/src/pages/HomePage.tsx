@@ -16,6 +16,7 @@ import "../App.css";
 const HomePage = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [platform, setPlatform] = useState<Platform | null>(null);
+
   const [region, setRegion] = useState<Region>({
     iso_3166_1: "HU",
     english_name: "Hungary",
@@ -72,6 +73,7 @@ const HomePage = () => {
               onSelectPlatform={setPlatform}
             />
             <RegionSelector
+              className="ml-4 md:ml-0 w-60"
               onApply={handleRegionApply}
               selectedRegion={region}
               onSelectedRegion={setRegion}

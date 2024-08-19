@@ -6,12 +6,14 @@ interface Props {
   onSelectedRegion: (region: Region) => void;
   selectedRegion: Region | null;
   onApply: () => void;
+  className?: string; // Optional className prop
 }
 
 const RegionSelector = ({
   onSelectedRegion,
   selectedRegion,
   onApply,
+  className, // Destructure the className prop
 }: Props) => {
   const { data, error, isLoading } = useRegions();
   const [isOpen, setIsOpen] = useState(false);
@@ -44,11 +46,14 @@ const RegionSelector = ({
     region.english_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const baseButtonClasses =
+    "inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700";
+
   if (isLoading) {
     return (
       <button
         type="button"
-        className="inline-flex ml-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+        className={`${baseButtonClasses} ${className || "w-60"}`}
         id="options-menu"
         aria-haspopup="true"
         aria-expanded="true"
@@ -65,7 +70,7 @@ const RegionSelector = ({
     return (
       <button
         type="button"
-        className="inline-flex ml-4 justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+        className={`${baseButtonClasses} ${className || "w-60"}`}
         id="options-menu"
         aria-haspopup="true"
         aria-expanded="true"
@@ -80,13 +85,13 @@ const RegionSelector = ({
 
   return (
     <div
-      className="relative inline-block text-left ml-4 mt-2 md:mt-0"
+      className="relative inline-block text-left  mt-2 md:mt-0"
       ref={dropdownRef}
     >
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-60 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+          className={`${baseButtonClasses} ${className || "w-60"}`}
           id="options-menu"
           aria-haspopup="true"
           aria-expanded="true"
@@ -102,7 +107,9 @@ const RegionSelector = ({
       </div>
 
       <div
-        className={`origin-top-right absolute right-0 mt-2 w-60 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 max-h-[440px] overflow-auto custom-scrollbar z-50 transition-all duration-300 ease-in-out transform ${
+        className={`origin-top-right absolute right-0 mt-2 ${
+          className || "w-60"
+        } rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 max-h-[440px] overflow-auto custom-scrollbar z-50 transition-all duration-300 ease-in-out transform ${
           isOpen ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"
         }`}
         style={{ transformOrigin: "top" }}
