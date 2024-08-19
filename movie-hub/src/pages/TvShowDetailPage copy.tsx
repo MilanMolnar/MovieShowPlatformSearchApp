@@ -4,6 +4,7 @@ import useProviders from "../hooks/useProviders";
 import useTvShowDetails from "../hooks/useTvShowDetails";
 import useSeasonDetails from "../hooks/useSeasonDetails";
 import useRegions, { Region } from "../hooks/useRegions";
+import useTvShowCredits from "../hooks/useTvShowCredits"; // New Hook
 import TvShowDetailSkeleton from "../components/TvShowDetailSkeleton";
 import ProvidersSkeleton from "../components/ProviderSkeleton";
 import SeasonDetailSkeleton from "../components/TvShowSeasonDetailsSkeleton";
@@ -12,7 +13,6 @@ import SeasonSelector from "../components/SeasonSelector";
 import { useRegion } from "../providers/RegionContextProvider";
 import EpisodeDetails from "../components/EpisodeDetails";
 import { motion, AnimatePresence } from "framer-motion";
-import useTvShowCredits from "../hooks/useTvShowCredits";
 
 const TvShowDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,16 +46,17 @@ const TvShowDetailPage = () => {
     isError: isRegionsError,
   } = useRegions();
 
-  const { data: tvShowCredits, isLoading: isCreditsLoading } = useTvShowCredits(
-    id!
-  );
-
   // Fetch specific season details
   const {
     data: seasonDetails,
     isLoading: isSeasonLoading,
     isError: isSeasonError,
   } = useSeasonDetails(Number(id), season);
+
+  // Fetch credits (cast)
+  const { data: tvShowCredits, isLoading: isCreditsLoading } = useTvShowCredits(
+    id!
+  );
 
   const handleRegionChange = (region: Region) => {
     setRegion(region);
@@ -148,6 +149,7 @@ const TvShowDetailPage = () => {
                   {tvShowDetails.type}
                 </span>
               </p>
+
               {/* Starring Section */}
               {isCreditsLoading ? (
                 <p>Loading cast...</p>
@@ -186,130 +188,98 @@ const TvShowDetailPage = () => {
               {isProvidersLoading ? (
                 <ProvidersSkeleton />
               ) : isProvidersError ? (
-                <p className="text-center text-lg text-red-500">
-                  Error loading providers.
-                </p>
-              ) : Array.isArray(providers) && providers.length > 0 ? (
-                <div>
-                  <h2 className="text-xl md:text-2xl font-semibold dark:text-white mb-4">
-                    Watch Providers for Season {season} in {region.iso_3166_1}:
-                  </h2>
-                  <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {providers.map((provider) => (
-                      <li
-                        key={provider.provider_id}
-                        className="flex items-center space-x-2"
-                      >
-                        <img
-                          src={`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
-                          alt={provider.provider_name}
-                          className="h-10"
-                        />
-                        <span className="dark:text-white">
-                          {provider.provider_name}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="text-red-500">
+                  Sorry, there was an issue loading the providers.
                 </div>
+              ) : providers?.length ? (
+                <ul className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+                  {providers.map((provider) => (
+                    <li key={provider.provider_id}>
+                      <img
+                        src={`https://image.tmdb.org/t/p/w185${provider.logo_path}`}
+                        alt={provider.provider_name}
+                        className="rounded-lg shadow-lg"
+                      />
+                    </li>
+                  ))}
+                </ul>
               ) : (
-                <p className="text-center text-lg">
-                  No providers found for this season in this region.
-                </p>
+                <p>No providers available for this show in your region.</p>
               )}
             </div>
 
             {/* Season Details */}
-            <div className="mb-5">
-              <h2 className="text-xl md:text-2xl font-semibold dark:text-white">
-                Season {season} Details:
-              </h2>
+            <div className="p-4 shadow-lg bg-white dark:bg-gray-800 rounded-lg">
               {isSeasonLoading ? (
                 <SeasonDetailSkeleton />
               ) : isSeasonError ? (
-                <p className="text-red-500">Error loading season details.</p>
+                <div className="text-red-500">
+                  Sorry, there was an issue loading the season details.
+                </div>
               ) : seasonDetails ? (
-                <div className="pb-10 pt-5">
-                  <p className="text-sm md:text-base text-black dark:text-gray-400">
-                    Overview:{" "}
-                    <span className="dark:text-white text-zinc-700">
-                      {seasonDetails.overview || "No overview provided"}
-                    </span>
+                <div>
+                  <h2 className="text-xl md:text-2xl font-bold mb-4 dark:text-white">
+                    Season {seasonDetails.season_number}: {seasonDetails.name}
+                  </h2>
+                  <p className="text-sm md:text-base text-black dark:text-gray-400 mb-4">
+                    {seasonDetails.overview}
                   </p>
-                  <p className="text-sm md:text-base text-black dark:text-gray-400">
-                    Air Date:{" "}
-                    <span className="dark:text-white text-zinc-700">
-                      {seasonDetails.air_date}
-                    </span>
-                  </p>
-                  <p className="text-sm md:text-base text-black dark:text-gray-400">
-                    Number of Episodes:{" "}
-                    <span className="dark:text-white text-zinc-700">
-                      {seasonDetails.episodes.length || "No air date provided"}
-                    </span>
-                  </p>
-                  <ul className="mt-4 space-y-2">
+                  <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
                     {seasonDetails.episodes.map((episode) => (
-                      <li
+                      <motion.div
                         key={episode.id}
-                        className="flex flex-col space-y-2 pt-5"
+                        className="p-4 rounded-lg shadow-lg bg-gray-200 dark:bg-gray-700 cursor-pointer relative overflow-hidden"
+                        onClick={() => toggleEpisode(episode.episode_number)}
+                        onMouseEnter={() =>
+                          setHoveredEpisode(episode.episode_number)
+                        }
+                        onMouseLeave={() => setHoveredEpisode(null)}
                       >
-                        <div
-                          className="flex items-start space-x-2 cursor-pointer"
-                          onClick={() => toggleEpisode(episode.episode_number)}
-                        >
-                          <div
-                            className="w-20 h-20 flex-shrink-0 relative"
-                            onMouseEnter={() =>
-                              setHoveredEpisode(episode.episode_number)
-                            }
-                            onMouseLeave={() => setHoveredEpisode(null)}
-                          >
-                            {episode.still_path && (
-                              <img
-                                src={`https://image.tmdb.org/t/p/w154${episode.still_path}`}
-                                alt={episode.name}
-                                className={`rounded 
-                            ${
-                              hoveredEpisode === episode.episode_number
-                                ? "outline outline-3 outline-blue-400 dark:outline-gray-500"
-                                : ""
-                            }
-                            ${
-                              expandedEpisode === episode.episode_number
-                                ? "outline outline-3 outline-blue-700 dark:outline-white"
-                                : ""
-                            }
-                          `}
-                              />
-                            )}
+                        <div className="grid grid-cols-4 gap-2">
+                          <div className="col-span-1">
+                            <img
+                              src={`https://image.tmdb.org/t/p/w185${episode.still_path}`}
+                              alt={episode.name}
+                              className="rounded-lg"
+                            />
                           </div>
-                          <div>
-                            <h3 className="text-sm md:text-base font-semibold text-black dark:text-white">
+                          <div className="col-span-3">
+                            <h3 className="text-md md:text-lg font-semibold mb-2 dark:text-white">
                               {episode.episode_number}. {episode.name}
                             </h3>
-                            <p className="text-sm md:text-base text-black dark:text-gray-400">
+                            <p className="text-xs md:text-sm text-black dark:text-gray-400 line-clamp-3">
                               {episode.overview}
                             </p>
                           </div>
                         </div>
                         <AnimatePresence>
                           {expandedEpisode === episode.episode_number && (
-                            <EpisodeDetails
-                              seriesId={Number(id)}
-                              seasonNumber={season}
-                              episodeNumber={episode.episode_number}
-                            />
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="mt-4"
+                            >
+                              <EpisodeDetails
+                                seriesId={Number(id)}
+                                seasonNumber={season}
+                                episodeNumber={episode.episode_number}
+                              />
+                            </motion.div>
                           )}
                         </AnimatePresence>
-                      </li>
+                        {hoveredEpisode === episode.episode_number && (
+                          <motion.div
+                            layoutId="underline"
+                            className="absolute inset-x-0 bottom-0 h-[2px] bg-zinc-900 dark:bg-gray-300"
+                          />
+                        )}
+                      </motion.div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               ) : (
-                <p className="text-lg text-center">
-                  No season details available.
-                </p>
+                <div>No season details available.</div>
               )}
             </div>
           </>
