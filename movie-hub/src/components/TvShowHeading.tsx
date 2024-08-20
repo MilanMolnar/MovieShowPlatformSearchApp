@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Genre } from "../hooks/useGenres";
 import { Platform } from "../hooks/usePlatforms";
 import { Region } from "../hooks/useRegions";
@@ -18,28 +19,40 @@ const TvShowHeading = ({
   isSearching,
   region,
 }: Props) => {
+  const { t } = useTranslation();
   const headingStyle =
     "text-3xl md:text-4xl select-none font-bold ml-4 mt-10 mb-6 text-gray-900 dark:text-gray-300";
+
   if (isSearching) {
-    return <h1 className={headingStyle}>Result for: "{searchQuery}"</h1>;
+    return <h1 className={headingStyle}>{t("result_for", { searchQuery })}</h1>;
   }
   if (genres.length === 0 && !platform && !region) {
-    return <h1 className={headingStyle}>Discover Shows</h1>;
+    return <h1 className={headingStyle}>{t("discover_shows")}</h1>;
   }
   if (genres.length === 0 && !platform) {
     return (
-      <h1 className={headingStyle}>Discover Shows in {region.english_name}</h1>
+      <h1 className={headingStyle}>
+        {t("discover_shows_in_region", { regionName: region.native_name })}
+      </h1>
     );
   }
   const genreNames = genres.map((genre) => genre.name).join(", ");
   if (!platform) {
     return (
       <h1 className={headingStyle}>
-        {genreNames} Shows in {region.english_name}
+        {t("genre_platform_shows_in_region", {
+          genreNames,
+          platformName: "",
+          regionCode: region.native_name,
+        })}
       </h1>
     );
   }
-  const heading = `${genreNames} ${platform?.provider_name} Shows in ${region.iso_3166_1}`;
+  const heading = t("genre_platform_shows_in_region", {
+    genreNames,
+    platformName: platform.provider_name,
+    regionCode: region.native_name,
+  });
   return <h1 className={headingStyle}>{heading}</h1>;
 };
 

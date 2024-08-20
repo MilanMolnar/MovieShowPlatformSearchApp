@@ -13,6 +13,7 @@ import { useRegion } from "../providers/RegionContextProvider";
 import EpisodeDetails from "../components/EpisodeDetails";
 import { motion, AnimatePresence } from "framer-motion";
 import useTvShowCredits from "../hooks/useTvShowCredits";
+import { useTranslation } from "react-i18next";
 
 const TvShowDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +21,7 @@ const TvShowDetailPage = () => {
   const { region, setRegion } = useRegion();
   const [expandedEpisode, setExpandedEpisode] = useState<number | null>(null);
   const [hoveredEpisode, setHoveredEpisode] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   const toggleEpisode = (episodeNumber: number) => {
     setExpandedEpisode(
@@ -95,65 +97,65 @@ const TvShowDetailPage = () => {
             {/* TV Show Details */}
             <div className="mb-4 grid gap-4 md:grid-cols-2">
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                Genres:{" "}
+                {t("tvShowDetails.genres") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.genres.map((genre) => genre.name).join(", ")}
                 </span>
               </p>
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                First Air Date:{" "}
+                {t("tvShowDetails.firstAirDate") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.first_air_date}
                 </span>
               </p>
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                Last Air Date:{" "}
+                {t("tvShowDetails.lastAirDate") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.last_air_date}
                 </span>
               </p>
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                Status:{" "}
+                {t("tvShowDetails.status") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.status}
                 </span>
               </p>
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                Vote Average:{" "}
+                {t("tvShowDetails.voteAverage") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.vote_average}
                 </span>
               </p>
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                Number of Seasons:{" "}
+                {t("tvShowDetails.numberOfSeasons") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.number_of_seasons}
                 </span>
               </p>
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                Number of Episodes:{" "}
+                {t("tvShowDetails.numberOfEpisodes") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.number_of_episodes}
                 </span>
               </p>
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                Original Language:{" "}
+                {t("tvShowDetails.originalLanguage") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.original_language}
                 </span>
               </p>
               <p className="text-sm md:text-base text-black dark:text-gray-400">
-                Type:{" "}
+                {t("tvShowDetails.type") + ": "}
                 <span className="dark:text-white text-zinc-700">
                   {tvShowDetails.type}
                 </span>
               </p>
               {/* Starring Section */}
               {isCreditsLoading ? (
-                <p>Loading cast...</p>
+                <p>{t("loading.loadingCast")}</p>
               ) : tvShowCredits && tvShowCredits.cast.length > 0 ? (
                 <p className="text-sm md:text-base text-black dark:text-gray-400">
-                  Starring:{" "}
+                  {t("tvShowDetails.starring") + ": "}
                   <span className="dark:text-white text-zinc-700">
                     {tvShowCredits.cast
                       .slice(0, 5)
@@ -187,12 +189,15 @@ const TvShowDetailPage = () => {
                 <ProvidersSkeleton />
               ) : isProvidersError ? (
                 <p className="text-center text-lg text-red-500">
-                  Error loading providers.
+                  {t("regionAndSeasonSelectors.errorLoadingProviders")}
                 </p>
               ) : Array.isArray(providers) && providers.length > 0 ? (
                 <div>
                   <h2 className="text-xl md:text-2xl font-semibold dark:text-white mb-4">
-                    Watch Providers for Season {season} in {region.iso_3166_1}:
+                    {t("regionAndSeasonSelectors.watchProviders", {
+                      season: season,
+                      region: region.iso_3166_1,
+                    })}
                   </h2>
                   <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {providers.map((provider) => (
@@ -222,7 +227,7 @@ const TvShowDetailPage = () => {
             {/* Season Details */}
             <div className="mb-5">
               <h2 className="text-xl md:text-2xl font-semibold dark:text-white">
-                Season {season} Details:
+                {t("seasonDetails.seasonDetails", { season: season })}
               </h2>
               {isSeasonLoading ? (
                 <SeasonDetailSkeleton />
@@ -231,19 +236,22 @@ const TvShowDetailPage = () => {
               ) : seasonDetails ? (
                 <div className="pb-10 pt-5">
                   <p className="text-sm md:text-base text-black dark:text-gray-400">
-                    Overview:{" "}
+                    {t("seasonDetails.overview")}
+                    {": "}
                     <span className="dark:text-white text-zinc-700">
-                      {seasonDetails.overview || "No overview provided"}
+                      {seasonDetails.overview || t("noOverview")}
                     </span>
                   </p>
                   <p className="text-sm md:text-base text-black dark:text-gray-400">
-                    Air Date:{" "}
+                    {t("seasonDetails.airDate")}
+                    {": "}
                     <span className="dark:text-white text-zinc-700">
                       {seasonDetails.air_date}
                     </span>
                   </p>
                   <p className="text-sm md:text-base text-black dark:text-gray-400">
-                    Number of Episodes:{" "}
+                    {t("seasonDetails.numberOfEpisodes")}
+                    {": "}
                     <span className="dark:text-white text-zinc-700">
                       {seasonDetails.episodes.length || "No air date provided"}
                     </span>

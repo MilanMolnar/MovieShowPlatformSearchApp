@@ -1,14 +1,17 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
 import TMDBLogo from "../assets/TMDB.svg";
 import { useDarkMode } from "../providers/DarkmodeContextProvider";
 
-const CreditFooter = () => {
+const CreditFooter: React.FC = () => {
+  const { t } = useTranslation();
   const { darkMode } = useDarkMode();
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-opacity-0 hidden sm:flex pointer-events-none dark:text-gray-200 p-4 flex flex-col sm:flex-row items-center z-50">
       <div className="flex items-center mb-2 sm:mb-0 ml-5">
         <span className="text-m select-none w-96 lg:w-[700px] lm:w-full">
-          This Badge animation was made possible by Paul Henschel's Blog about
-          3D event badge with React Three Fiber, check it out here:
+          {t("credit_footer_message")}
         </span>
         <a
           className="font-bold ml-5 flex pointer-events-auto relative"
@@ -33,7 +36,7 @@ const CreditFooter = () => {
 
           {/* Vercel Text */}
           <span className="relative z-10 text-black text-lg select-none dark:text-black ml-2">
-            VERCEL
+            {t("vercel")}
           </span>
         </a>
       </div>

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { useSearch } from "../providers/SearchmodeContextProvider";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const SearchBox = () => {
   const [inputValue, setInputValue] = useState("");
   const { handleSearch, setIsSearching } = useSearch();
   const navigate = useNavigate(); // React Router's navigation hook
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (inputValue !== "") {
@@ -44,7 +46,7 @@ const SearchBox = () => {
       <input
         className="w-full px-4 py-1 text-gray-700 dark:text-gray-300 rounded-l-md bg-gray-300 dark:bg-gray-800 focus:outline-none focus:bg-white dark:focus:bg-gray-700"
         type="text"
-        placeholder="Search..."
+        placeholder={t("search_placeholder")}
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown} // Trigger search on Enter key press

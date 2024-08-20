@@ -19,6 +19,7 @@ import {
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import textureImage from "../assets/favicon.png"; // Path to your texture image
 import { useDarkMode } from "../providers/DarkmodeContextProvider";
+import { useTranslation } from "react-i18next";
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -109,6 +110,7 @@ function Band({
   const j3 = useRef<any>(null);
   const card = useRef<any>(null);
   const carabiner = useRef<THREE.Mesh>(null);
+  const { t } = useTranslation();
 
   const vec = new THREE.Vector3();
   const ang = new THREE.Vector3();
@@ -286,7 +288,7 @@ function Band({
               anchorY="middle" // Vertical alignment
               rotation={[0, 0, 0]} // Rotate text if needed
             >
-              {`V I S I T O R   P A S S`}
+              {t("visitor")}
             </Text>
             <Text
               position={[-0.186, 0.98, 0.009]} // Adjust the position as needed

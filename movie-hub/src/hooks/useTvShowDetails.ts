@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { AxiosError } from "axios";
+import { useLanguage } from "../providers/LanguageContextProvider"; // Import useLanguage hook
 
 export interface TvShowDetails {
   id: number;
@@ -54,10 +55,18 @@ export interface TvShowDetails {
 }
 
 const useTvShowDetails = (id: string) => {
+  const { language } = useLanguage(); // Get the current language from context
+
+  const languageCode = language === "en" ? "en-US" : "hu-HU"; // Convert to appropriate locale code
+
   return useQuery<TvShowDetails, AxiosError>({
-    queryKey: ["tvShowDetails", id],
+    queryKey: ["tvShowDetails", id, languageCode], // Include languageCode in queryKey
     queryFn: async () => {
-      const response = await apiClient.get<TvShowDetails>(`/3/tv/${id}`);
+      const response = await apiClient.get<TvShowDetails>(`/3/tv/${id}`, {
+        params: {
+          language: languageCode, // Pass language as a parameter
+        },
+      });
       return response.data;
     },
   });

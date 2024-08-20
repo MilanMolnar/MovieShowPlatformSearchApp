@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 import { Genre } from "./useGenres";
 import { Platform } from "./usePlatforms";
 import { Region } from "./useRegions";
+import { useLanguage } from "../providers/LanguageContextProvider"; // Import useLanguage hook
 
 export interface TvShow {
   id: number;
@@ -28,14 +29,24 @@ const useTvShows = (
   selectedRegion: Region,
   selectedPlatform: Platform | null
 ) => {
+  const { language } = useLanguage(); // Get the current language from context
+
+  const languageCode = language === "en" ? "en-US" : "hu-HU"; // Convert to appropriate locale code
+
   const genreIds = genres.map((genre) => genre.id).join(",");
 
   const query = useInfiniteQuery<TvShowsResponse, AxiosError>({
-    queryKey: ["tvShows", genres, selectedRegion, selectedPlatform],
+    queryKey: [
+      "tvShows",
+      genres,
+      selectedRegion,
+      selectedPlatform,
+      languageCode,
+    ], // Include languageCode in queryKey
     queryFn: async ({ pageParam = 1 }) => {
       const params: any = {
         include_adult: true,
-        language: "en-US",
+        language: languageCode, // Pass language as a parameter
         page: pageParam,
         sort_by: "popularity.desc",
         with_watch_monetization_types: "flatrate|buy|free|rent|ads",

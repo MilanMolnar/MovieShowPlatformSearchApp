@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logoLight from "../assets/light_logo.webp";
 import logoDark from "../assets/logo.webp";
@@ -6,10 +6,17 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import { useDarkMode } from "../providers/DarkmodeContextProvider";
 import SearchBox from "./SearchBox";
 import { useAuth } from "../providers/AuthContextProvider";
+import { useTranslation } from "react-i18next";
+import { FaFlagUsa, FaFlag } from "react-icons/fa";
+import { useLanguage } from "../providers/LanguageContextProvider";
+import gb_flag from "../assets/gb.png";
+import hu_flag from "../assets/hun.png";
 
-const NavBar = () => {
+const NavBar: React.FC = () => {
   const { darkMode } = useDarkMode();
   const { userProfile } = useAuth(); // Access the user's profile
+  const { i18n } = useTranslation();
+  const { language, toggleLanguage } = useLanguage(); // Use useLanguage hook
   const navigate = useNavigate();
   const location = useLocation(); // Hook to get the current location
 
@@ -20,6 +27,10 @@ const NavBar = () => {
       document.documentElement.classList.remove("dark");
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    i18n.changeLanguage(language); // Sync the i18n language with the context language
+  }, [language, i18n]);
 
   const logo = darkMode ? logoDark : logoLight;
   const logoSrc = `${logo}?timestamp=${Date.now()}`;
@@ -57,6 +68,24 @@ const NavBar = () => {
               <Link to={"/profile"}>Login</Link>
             </span>
           )}
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center space-x-2 md:hidden  rounded transition"
+          >
+            {language === "en" ? (
+              <img
+                src={hu_flag}
+                alt="HU"
+                className="w-7  mr-[5px] transition"
+              />
+            ) : (
+              <img
+                src={gb_flag}
+                alt="GB"
+                className="w-7  mr-[5px] transition"
+              />
+            )}
+          </button>
         </div>
       </div>
       <div className="w-full mb-4 md:mb-0 mr-5">
@@ -78,6 +107,24 @@ const NavBar = () => {
           </span>
         )}
       </div>
+      <button
+        onClick={toggleLanguage}
+        className="flex items-center space-x-2 hidden md:flex rounded transition"
+      >
+        {language === "en" ? (
+          <img
+            src={hu_flag}
+            alt="HU"
+            className="w-7 mx-1 mr-[30px] transition"
+          />
+        ) : (
+          <img
+            src={gb_flag}
+            alt="GB"
+            className="w-7 mx-1 mr-[30px] transition"
+          />
+        )}
+      </button>
     </nav>
   );
 };

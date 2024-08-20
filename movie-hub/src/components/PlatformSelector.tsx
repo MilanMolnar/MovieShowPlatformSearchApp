@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import usePlatforms, { Platform } from "../hooks/usePlatforms";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onSelectPlatform: (platform: Platform) => void;
@@ -19,6 +20,7 @@ const PlatformSelector = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -83,7 +85,7 @@ const PlatformSelector = ({
         aria-expanded="true"
       >
         <div className="flex justify-between w-full">
-          <div className="">Loading...</div>
+          <div className="">{t("loadingPlaceholder")}</div>
           <FaCaretDown size={20} />
         </div>
       </button>
@@ -125,7 +127,7 @@ const PlatformSelector = ({
             <div className="">
               {selectedPlatform
                 ? selectedPlatform?.provider_name
-                : "Streaming platforms"}
+                : t("streamingPlatforms")}
             </div>
             {isOpen ? <FaCaretUp size={20} /> : <FaCaretDown size={20} />}
           </div>
@@ -142,7 +144,7 @@ const PlatformSelector = ({
           <div className="p-2">
             <input
               type="text"
-              placeholder="Search platforms..."
+              placeholder={t("search_placeholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"

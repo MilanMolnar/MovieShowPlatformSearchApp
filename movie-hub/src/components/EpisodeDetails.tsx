@@ -1,8 +1,8 @@
-// components/EpisodeDetails.tsx
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useEpisodeDetails from "../hooks/useEpisodeDetails";
 import Spinner from "./Spinner";
+import { useTranslation } from "react-i18next";
 
 interface EpisodeDetailsProps {
   seriesId: number;
@@ -15,6 +15,7 @@ const EpisodeDetails: React.FC<EpisodeDetailsProps> = ({
   seasonNumber,
   episodeNumber,
 }) => {
+  const { t } = useTranslation();
   const {
     data: episodeDetails,
     isLoading,
@@ -24,7 +25,7 @@ const EpisodeDetails: React.FC<EpisodeDetailsProps> = ({
   const [isGuestStarsExpanded, setIsGuestStarsExpanded] = useState(false);
 
   if (isLoading) return <Spinner />;
-  if (isError) return <div>Error loading episode details</div>;
+  if (isError) return <div>{t("error_loading_details")}</div>; // Added translation key for error message
   if (!episodeDetails) return null;
 
   return (
@@ -35,10 +36,10 @@ const EpisodeDetails: React.FC<EpisodeDetailsProps> = ({
       transition={{ duration: 0.3 }}
       className="mt-4 space-y-4"
     >
-      <DetailItem label="Air Date" value={episodeDetails.air_date} />
-      <DetailItem label="Overview" value={episodeDetails.overview} />
+      <DetailItem label={t("air_date")} value={episodeDetails.air_date} />
+      <DetailItem label={t("overview")} value={episodeDetails.overview} />
       <DetailItem
-        label="Vote Average"
+        label={t("vote_average")}
         value={`${episodeDetails.vote_average.toFixed(1)} (${
           episodeDetails.vote_count
         } votes)`}
@@ -47,7 +48,7 @@ const EpisodeDetails: React.FC<EpisodeDetailsProps> = ({
       {episodeDetails.crew.length > 0 && (
         <div>
           <strong className="text-sm md:text-base text-black dark:text-gray-400">
-            Crew:
+            {t("crew")}:
           </strong>
           <ul className="list-disc list-inside">
             {episodeDetails.crew.slice(0, 5).map((member) => (
@@ -71,8 +72,10 @@ const EpisodeDetails: React.FC<EpisodeDetailsProps> = ({
             onClick={() => setIsGuestStarsExpanded(!isGuestStarsExpanded)}
             className="text-sm md:text-base font-bold text-gray-600 hover:text-black dark:text-gray-500 dark:hover:text-gray-300 transition focus:outline-none"
           >
-            {isGuestStarsExpanded ? "Hide" : "Show"} Guest Stars (
-            {episodeDetails.guest_stars.length})
+            {isGuestStarsExpanded
+              ? t("hide_guest_stars")
+              : t("show_guest_stars")}{" "}
+            ({episodeDetails.guest_stars.length})
           </button>
           <AnimatePresence>
             {isGuestStarsExpanded && (

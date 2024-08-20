@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useRegions, { Region } from "../hooks/useRegions";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onSelectedRegion: (region: Region) => void;
@@ -19,6 +20,7 @@ const RegionSelector = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,7 +45,7 @@ const RegionSelector = ({
   }, [isOpen]);
 
   const filteredRegions = data?.filter((region) =>
-    region.english_name.toLowerCase().includes(searchQuery.toLowerCase())
+    region.native_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const baseButtonClasses =
@@ -59,7 +61,7 @@ const RegionSelector = ({
         aria-expanded="true"
       >
         <div className="flex justify-between w-full">
-          <div className="">Loading...</div>
+          <div className="">{t("loadingPlaceholder")}</div>
           <FaCaretDown size={20} />
         </div>
       </button>
@@ -99,7 +101,7 @@ const RegionSelector = ({
         >
           <div className="flex justify-between w-full">
             <div className="">
-              {selectedRegion ? selectedRegion?.english_name : "Regions"}
+              {selectedRegion ? selectedRegion?.native_name : t("regions")}
             </div>
             {isOpen ? <FaCaretUp size={20} /> : <FaCaretDown size={20} />}
           </div>
@@ -117,7 +119,7 @@ const RegionSelector = ({
         <div className="p-2">
           <input
             type="text"
-            placeholder="Search regions..."
+            placeholder={t("search_placeholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -141,7 +143,7 @@ const RegionSelector = ({
                 onApply();
               }}
             >
-              {region.english_name}
+              {region.native_name}
             </a>
           ))}
           {filteredRegions?.length === 0 && (

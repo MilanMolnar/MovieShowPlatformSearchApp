@@ -7,6 +7,7 @@ import TvShowSkeleton from "./TvShowSkeleton";
 import { PersistentOutline } from "./PersistentOutline";
 import "../App.css";
 import { Region } from "../hooks/useRegions";
+import { useTranslation } from "react-i18next";
 
 interface TvShowsData {
   data: TvShow[];
@@ -30,6 +31,7 @@ interface OutlinePosition {
 }
 
 const TvShowGrid: React.FC<Props> = ({ tvShowsData, selectedPlatform }) => {
+  const { t } = useTranslation();
   const {
     data,
     error,
@@ -122,7 +124,7 @@ const TvShowGrid: React.FC<Props> = ({ tvShowsData, selectedPlatform }) => {
           scaleFactor={scaleFactor}
         />
       )}
-      {error && <div>{error}</div>}
+      {error && <div>{t("error_loading_tv_shows")}</div>}
       <div
         ref={gridRef}
         className="grid lg:grid-cols-3 lm:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-1 mt-2 overflow-hidden"
@@ -130,7 +132,9 @@ const TvShowGrid: React.FC<Props> = ({ tvShowsData, selectedPlatform }) => {
         {isLoading &&
           skeletonCount.map((skeleton) => <TvShowSkeleton key={skeleton} />)}
         {data.length === 0 && !isLoading ? (
-          <div className="text-2xl ml-4 my-2 w-full">No Tv Shows Found</div>
+          <div className="text-2xl ml-4 my-2 w-full">
+            {t("no_tv_shows_found")}
+          </div>
         ) : (
           data.map((tvShow) => (
             <div
@@ -152,7 +156,7 @@ const TvShowGrid: React.FC<Props> = ({ tvShowsData, selectedPlatform }) => {
           onClick={scrollToTop}
           className="fixed bottom-4 w-32 left-1/2 transform -translate-x-1/2 bg-blue-500 dark:bg-slate-500 text-white p-2 rounded-full shadow-lg z-50  transition-all duration-300 ease-in-out opacity-60 hover:opacity-100"
         >
-          ↑ Back to Top
+          {t("back_to_top")}
         </button>
       )}
     </div>

@@ -5,6 +5,7 @@ import {
   googleLogout,
 } from "@react-oauth/google";
 import { useAuth } from "../providers/AuthContextProvider";
+import { useTranslation } from "react-i18next";
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_ID || "";
 
@@ -42,6 +43,7 @@ const parseJwt = (token: string) => {
 };
 
 const AuthContainer: React.FC = () => {
+  const { t } = useTranslation();
   const { userProfile, setUserProfile } = useAuth();
 
   useEffect(() => {
@@ -73,23 +75,22 @@ const AuthContainer: React.FC = () => {
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <div className="flex items-center justify-center">
         <div
-          className={`bg-white dark:bg-gray-800 rounded-lg shadow-xl p-10  sm:max-w-sm md:max-w-lg lg:max-w-xl w-full transform transition-transform ${
+          className={`bg-white dark:bg-gray-800 rounded-lg shadow-xl p-10 sm:max-w-sm md:max-w-lg lg:max-w-xl w-full transform transition-transform ${
             !userProfile && "lg:p-20"
           }`}
         >
           <h2 className="text-3xl font-semibold text-center text-gray-900 dark:text-white mb-8">
-            {" "}
-            {userProfile ? "Account" : "Sign in"}
+            {userProfile ? t("account") : t("sign_in")}
           </h2>
           {!userProfile ? (
             <div className="text-center">
               <p className="text-gray-600 dark:text-gray-300 mb-8">
-                Use your google account to sign in.
+                {t("sign_in_message")}
               </p>
               <GoogleLogin
                 onSuccess={handleLoginSuccess}
                 onError={() => {
-                  console.log("Login Failed");
+                  console.log(t("login_failed"));
                 }}
               />
             </div>
@@ -103,16 +104,16 @@ const AuthContainer: React.FC = () => {
                 />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Welcome, {userProfile.name}!
+                {t("welcome_message", { name: userProfile.name })}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-8">
-                {userProfile.email}
+                {t("email", { email: userProfile.email })}
               </p>
               <button
                 onClick={handleLogout}
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded w-full transition-colors"
               >
-                Logout
+                {t("logout")}
               </button>
             </div>
           )}

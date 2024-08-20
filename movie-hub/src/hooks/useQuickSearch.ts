@@ -1,7 +1,7 @@
-// useQuickSearch.ts
 import { useInfiniteQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { AxiosError } from "axios";
+import { useLanguage } from "../providers/LanguageContextProvider"; // Import useLanguage hook
 
 export interface TvShow {
   id: number;
@@ -21,13 +21,17 @@ interface SearchResponse {
 }
 
 const useQuickSearch = (searchQuery: string) => {
+  const { language } = useLanguage(); // Get the current language from context
+
+  const languageCode = language === "en" ? "en-US" : "hu-HU"; // Convert to appropriate locale code
+
   const query = useInfiniteQuery<SearchResponse, AxiosError>({
-    queryKey: ["quickSearch", searchQuery],
+    queryKey: ["quickSearch", searchQuery, languageCode], // Include languageCode in queryKey to refetch when language changes
     queryFn: async ({ pageParam = 1 }) => {
       const params = {
         query: searchQuery,
         include_adult: true,
-        language: "en-US",
+        language: languageCode, // Use the current language
         page: pageParam,
       };
 
