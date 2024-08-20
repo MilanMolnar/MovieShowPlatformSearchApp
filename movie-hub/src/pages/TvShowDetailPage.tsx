@@ -272,12 +272,12 @@ const TvShowDetailPage = () => {
                                 className={`rounded 
                             ${
                               hoveredEpisode === episode.episode_number
-                                ? "outline outline-3 outline-blue-400 dark:outline-gray-500"
+                                ? "outline outline-2 outline-blue-400 dark:outline-gray-500 "
                                 : ""
                             }
                             ${
                               expandedEpisode === episode.episode_number
-                                ? "outline outline-3 outline-blue-700 dark:outline-white"
+                                ? "outline outline-2 outline-blue-700 dark:outline-white"
                                 : ""
                             }
                           `}
