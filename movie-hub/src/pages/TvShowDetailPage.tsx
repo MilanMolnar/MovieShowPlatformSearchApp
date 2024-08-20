@@ -196,7 +196,7 @@ const TvShowDetailPage = () => {
                   <h2 className="text-xl md:text-2xl font-semibold dark:text-white mb-4">
                     {t("regionAndSeasonSelectors.watchProviders", {
                       season: season,
-                      region: region.iso_3166_1,
+                      region: region.native_name,
                     })}
                   </h2>
                   <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
