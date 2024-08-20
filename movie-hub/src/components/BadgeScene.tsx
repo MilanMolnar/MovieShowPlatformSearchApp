@@ -47,7 +47,7 @@ export default function BadgeScene({
   userPicture,
 }: BandProps) {
   return (
-    <div style={{ width: "100%", height: "100vh" }}>
+    <div style={{ width: "100%", height: "91vh" }}>
       <Canvas camera={{ position: [0, 0, 20], fov: 20 }}>
         <ambientLight intensity={1} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
