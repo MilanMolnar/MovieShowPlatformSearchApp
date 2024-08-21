@@ -16,10 +16,19 @@ interface RegionsResponse {
 const useRegions = () => {
   const { language } = useLanguage(); // Get the current language from context
 
-  const languageCode = language === "en" ? "en-US" : "hu-HU"; // Convert to appropriate locale code
+  // Map the language codes to TMDB-supported language codes
+  const languageMap: { [key: string]: string } = {
+    en: "en-US",
+    hu: "hu-HU",
+    es: "es-ES",
+    ge: "de-DE", // TMDB uses 'de' for German, so 'ge' is mapped to 'de'
+    ja: "ja-JP",
+  };
+
+  const languageCode = languageMap[language] || "en-US"; // Default to "en-US" if language is not found
 
   return useQuery<Region[], AxiosError>({
-    queryKey: ["regions", languageCode], // Include languageCode in queryKey
+    queryKey: ["regions", languageCode], // Include languageCode in queryKey to refetch when language changes
     queryFn: async () => {
       const response = await apiClient.get<RegionsResponse>(
         "/3/watch/providers/regions",

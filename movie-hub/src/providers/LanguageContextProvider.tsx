@@ -1,15 +1,18 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import initReactI18next from "../translationInit"; // Assuming this is your i18next initialization
 
 interface LanguageContextType {
   language: string;
-  toggleLanguage: () => void;
+  setLanguage: (lang: string) => void; // Update to have a setter function
 }
+
 interface Props {
   children: React.ReactNode;
 }
+
 const LanguageContext = createContext<LanguageContextType>({
   language: "en",
-  toggleLanguage: () => {},
+  setLanguage: () => {},
 });
 
 export const LanguageContextProvider = ({ children }: Props) => {
@@ -18,15 +21,12 @@ export const LanguageContextProvider = ({ children }: Props) => {
   );
 
   useEffect(() => {
-    localStorage.setItem("language", language);
+    initReactI18next.changeLanguage(language); // Sync the i18n language with the context language
+    localStorage.setItem("language", language); // Save language in local storage
   }, [language]);
 
-  const toggleLanguage = () => {
-    setLanguage((prevLanguage) => (prevLanguage === "en" ? "hu" : "en"));
-  };
-
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+    <LanguageContext.Provider value={{ language, setLanguage }}>
       {children}
     </LanguageContext.Provider>
   );

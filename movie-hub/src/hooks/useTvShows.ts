@@ -31,7 +31,16 @@ const useTvShows = (
 ) => {
   const { language } = useLanguage(); // Get the current language from context
 
-  const languageCode = language === "en" ? "en-US" : "hu-HU"; // Convert to appropriate locale code
+  // Map the language codes to TMDB-supported language codes (if applicable)
+  const languageMap: { [key: string]: string } = {
+    en: "en-US",
+    hu: "hu-HU",
+    es: "es-ES",
+    ge: "de-DE", // TMDB uses 'de' for German
+    ja: "ja-JP",
+  };
+
+  const languageCode = languageMap[language] || "en-US"; // Default to "en-US" if language is not found
 
   const genreIds = genres.map((genre) => genre.id).join(",");
 

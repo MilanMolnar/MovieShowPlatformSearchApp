@@ -7,18 +7,14 @@ import { useDarkMode } from "../providers/DarkmodeContextProvider";
 import SearchBox from "./SearchBox";
 import { useAuth } from "../providers/AuthContextProvider";
 import { useTranslation } from "react-i18next";
-import { FaFlagUsa, FaFlag } from "react-icons/fa";
-import { useLanguage } from "../providers/LanguageContextProvider";
-import gb_flag from "../assets/gb.png";
-import hu_flag from "../assets/hun.png";
+import LanguageSelector from "./LanguageSelector"; // Import LanguageSelector
 
 const NavBar: React.FC = () => {
   const { darkMode } = useDarkMode();
-  const { userProfile } = useAuth(); // Access the user's profile
+  const { userProfile } = useAuth();
   const { i18n } = useTranslation();
-  const { language, toggleLanguage } = useLanguage(); // Use useLanguage hook
   const navigate = useNavigate();
-  const location = useLocation(); // Hook to get the current location
+  const location = useLocation();
 
   useEffect(() => {
     if (darkMode) {
@@ -28,18 +24,14 @@ const NavBar: React.FC = () => {
     }
   }, [darkMode]);
 
-  useEffect(() => {
-    i18n.changeLanguage(language); // Sync the i18n language with the context language
-  }, [language, i18n]);
-
   const logo = darkMode ? logoDark : logoLight;
   const logoSrc = `${logo}?timestamp=${Date.now()}`;
 
   const handleLogoClick = () => {
     if (location.pathname === "/") {
-      window.location.reload(); // Reload the page if already on the homepage
+      window.location.reload();
     } else {
-      navigate("/"); // Navigate to the homepage if on a different page
+      navigate("/");
     }
   };
 
@@ -68,24 +60,9 @@ const NavBar: React.FC = () => {
               <Link to={"/profile"}>Login</Link>
             </span>
           )}
-          <button
-            onClick={toggleLanguage}
-            className="flex items-center space-x-2 md:hidden  rounded transition"
-          >
-            {language === "en" ? (
-              <img
-                src={hu_flag}
-                alt="HU"
-                className="w-7  mr-[5px] transition"
-              />
-            ) : (
-              <img
-                src={gb_flag}
-                alt="GB"
-                className="w-7  mr-[5px] transition"
-              />
-            )}
-          </button>
+          <div className="flex md:hidden mx-2">
+            <LanguageSelector /> {/* Add LanguageSelector here */}
+          </div>
         </div>
       </div>
       <div className="w-full mb-4 md:mb-0 mr-5">
@@ -107,24 +84,9 @@ const NavBar: React.FC = () => {
           </span>
         )}
       </div>
-      <button
-        onClick={toggleLanguage}
-        className="flex items-center space-x-2 hidden md:flex rounded transition"
-      >
-        {language === "en" ? (
-          <img
-            src={hu_flag}
-            alt="HU"
-            className="w-7 mx-1 mr-[30px] transition"
-          />
-        ) : (
-          <img
-            src={gb_flag}
-            alt="GB"
-            className="w-7 mx-1 mr-[30px] transition"
-          />
-        )}
-      </button>
+      <div className="hidden md:flex items-center space-x-4 mx-3">
+        <LanguageSelector /> {/* Add LanguageSelector here */}
+      </div>
     </nav>
   );
 };

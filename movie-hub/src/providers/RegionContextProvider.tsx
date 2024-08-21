@@ -17,8 +17,8 @@ export const RegionProvider: React.FC<{ children: ReactNode }> = ({
   const { language } = useLanguage();
   const [region, setRegion] = useState<Region>({
     iso_3166_1: "HU",
-    english_name: language === "en" ? "Hungary" : "Magyar",
-    native_name: language === "en" ? "Hungary" : "Magyar",
+    english_name: language === "en" ? "Hungary" : "Magyarország",
+    native_name: language === "en" ? "Hungary" : "Magyarország",
   });
 
   return (
