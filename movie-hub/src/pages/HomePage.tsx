@@ -1,3 +1,5 @@
+// src/pages/HomePage.tsx
+
 import React, { useState, useEffect } from "react";
 import GenreList from "../components/GenreList";
 import TvShowGrid from "../components/TvShowGrid";
@@ -7,10 +9,11 @@ import RegionSelector from "../components/RegionSelector";
 import { useSearch } from "../providers/SearchmodeContextProvider";
 import useTvShows from "../hooks/useTvShows";
 import useQuickSearch from "../hooks/useQuickSearch";
+import useAISearch from "../hooks/useAiSearch"; // Assume you have this hook
 import { Genre } from "../hooks/useGenres";
 import { Platform } from "../hooks/usePlatforms";
-import { Region } from "../hooks/useRegions";
-import CookieConsent from "../components/CookieConsent"; // Import the CookieConsent component
+import CookieConsent from "../components/CookieConsent";
+import AISearchButton from "../components/AISearchButton";
 import "../App.css";
 import { useRegion } from "../providers/RegionContextProvider";
 
@@ -20,20 +23,34 @@ const HomePage = () => {
   const { region, setRegion } = useRegion();
   const [cookieConsent, setCookieConsent] = useState(false);
 
-  const { searchQuery, isSearching, setIsSearching } = useSearch();
+  const {
+    searchQuery,
+    aiSearchQuery,
+    isSearching,
+    isAISearching,
+    setIsSearching,
+    setIsAISearching,
+  } = useSearch();
 
   const filterData = useTvShows(genres, region, platform);
   const quickSearchData = useQuickSearch(searchQuery);
+  const aiSearchData = useAISearch(aiSearchQuery);
 
-  const tvShowsData = isSearching ? quickSearchData : filterData;
+  const tvShowsData = isSearching
+    ? quickSearchData
+    : isAISearching
+    ? aiSearchData
+    : filterData;
 
   const handleApply = () => {
     setIsSearching(false);
+    setIsAISearching(false);
   };
 
   const handleRegionApply = () => {
     setPlatform(null);
     setIsSearching(false);
+    setIsAISearching(false);
   };
 
   useEffect(() => {
@@ -56,8 +73,9 @@ const HomePage = () => {
         </aside>
         <main className="flex-grow p-4 overflow-auto no-scrollbar">
           <TvShowHeading
-            searchQuery={searchQuery}
+            searchQuery={isAISearching ? aiSearchQuery : searchQuery}
             isSearching={isSearching}
+            isAISearching={isAISearching}
             platform={platform}
             genres={genres}
             region={region}
@@ -80,6 +98,7 @@ const HomePage = () => {
         </main>
       </div>
       {!cookieConsent && <CookieConsent onAccept={handleCookieConsent} />}
+      <AISearchButton />
     </div>
   );
 };
