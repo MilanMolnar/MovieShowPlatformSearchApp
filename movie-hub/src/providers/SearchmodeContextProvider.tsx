@@ -15,11 +15,13 @@ interface SearchContextProps {
   handleAISearch: (query: string) => void;
 }
 
+interface Props {
+  children: React.ReactNode
+}
+
 const SearchContext = createContext<SearchContextProps | undefined>(undefined);
 
-export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const SearchProvider = ({children}:Props) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [aiSearchQuery, setAISearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);

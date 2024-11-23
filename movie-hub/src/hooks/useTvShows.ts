@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { Genre } from "./useGenres";
 import { Platform } from "./usePlatforms";
 import { Region } from "./useRegions";
-import { useLanguage } from "../providers/LanguageContextProvider"; // Import useLanguage hook
+import { useLanguage } from "../providers/LanguageContextProvider";
 
 export interface TvShow {
   id: number;
@@ -29,18 +29,18 @@ const useTvShows = (
   selectedRegion: Region,
   selectedPlatform: Platform | null
 ) => {
-  const { language } = useLanguage(); // Get the current language from context
+  const { language } = useLanguage();
 
-  // Map the language codes to TMDB-supported language codes (if applicable)
+
   const languageMap: { [key: string]: string } = {
     en: "en-US",
     hu: "hu-HU",
     es: "es-ES",
-    ge: "de-DE", // TMDB uses 'de' for German
+    ge: "de-DE",
     ja: "ja-JP",
   };
 
-  const languageCode = languageMap[language] || "en-US"; // Default to "en-US" if language is not found
+  const languageCode = languageMap[language] || "en-US";
 
   const genreIds = genres.map((genre) => genre.id).join(",");
 
@@ -51,11 +51,11 @@ const useTvShows = (
       selectedRegion,
       selectedPlatform,
       languageCode,
-    ], // Include languageCode in queryKey
+    ],
     queryFn: async ({ pageParam = 1 }) => {
       const params: any = {
         include_adult: true,
-        language: languageCode, // Pass language as a parameter
+        language: languageCode,
         page: pageParam,
         sort_by: "popularity.desc",
         with_watch_monetization_types: "flatrate|buy|free|rent|ads",

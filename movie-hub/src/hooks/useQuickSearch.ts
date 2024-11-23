@@ -21,26 +21,25 @@ interface SearchResponse {
 }
 
 const useQuickSearch = (searchQuery: string) => {
-  const { language } = useLanguage(); // Get the current language from context
+  const { language } = useLanguage();
 
-  // Map the language codes to TMDB-supported language codes
   const languageMap: { [key: string]: string } = {
     en: "en-US",
     hu: "hu-HU",
     es: "es-ES",
-    ge: "de-DE", // TMDB uses 'de' for German, so 'ge' is mapped to 'de'
+    ge: "de-DE",
     ja: "ja-JP",
   };
 
-  const languageCode = languageMap[language] || "en-US"; // Default to "en-US" if language is not found
+  const languageCode = languageMap[language] || "en-US";
 
   const query = useInfiniteQuery<SearchResponse, AxiosError>({
-    queryKey: ["quickSearch", searchQuery, languageCode], // Include languageCode in queryKey to refetch when language changes
+    queryKey: ["quickSearch", searchQuery, languageCode],
     queryFn: async ({ pageParam = 1 }) => {
       const params = {
         query: searchQuery,
         include_adult: true,
-        language: languageCode, // Use the current language
+        language: languageCode,
         page: pageParam,
       };
 
@@ -55,7 +54,7 @@ const useQuickSearch = (searchQuery: string) => {
         ? lastPage.page + 1
         : undefined;
     },
-    initialPageParam: 1, // Added this line to specify the initial page parameter
+    initialPageParam: 1,
   });
 
   return {

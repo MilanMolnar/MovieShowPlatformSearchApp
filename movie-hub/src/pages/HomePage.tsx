@@ -1,6 +1,4 @@
-// src/pages/HomePage.tsx
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import GenreList from "../components/GenreList";
 import TvShowGrid from "../components/TvShowGrid";
 import PlatformSelector from "../components/PlatformSelector";
@@ -9,7 +7,7 @@ import RegionSelector from "../components/RegionSelector";
 import { useSearch } from "../providers/SearchmodeContextProvider";
 import useTvShows from "../hooks/useTvShows";
 import useQuickSearch from "../hooks/useQuickSearch";
-import useAISearch from "../hooks/useAiSearch"; // Assume you have this hook
+import useAISearch from "../hooks/useAiSearch";
 import { Genre } from "../hooks/useGenres";
 import { Platform } from "../hooks/usePlatforms";
 import CookieConsent from "../components/CookieConsent";

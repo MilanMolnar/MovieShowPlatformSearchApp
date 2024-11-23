@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/api-client";
 import { AxiosError } from "axios";
-import { useLanguage } from "../providers/LanguageContextProvider"; // Import useLanguage hook
+import { useLanguage } from "../providers/LanguageContextProvider";
 
 export interface Genre {
   id: number;
@@ -13,25 +13,24 @@ interface GenresResponse {
 }
 
 const useGenres = () => {
-  const { language } = useLanguage(); // Get the current language from context
+  const { language } = useLanguage();
 
-  // Map the language codes to TMDB-supported language codes
   const languageMap: { [key: string]: string } = {
     en: "en-US",
     hu: "hu-HU",
     es: "es-ES",
-    ge: "de-DE", // Note: TMDB uses 'de' for German, so 'ge' is mapped to 'de'
+    ge: "de-DE",
     ja: "ja-JP",
   };
 
-  const languageCode = languageMap[language] || "en-US"; // Default to "en-US" if language is not found
+  const languageCode = languageMap[language] || "en-US";
 
   return useQuery<Genre[], AxiosError>({
-    queryKey: ["genres", languageCode], // Include languageCode in queryKey
+    queryKey: ["genres", languageCode],
     queryFn: async () => {
       const response = await apiClient.get<GenresResponse>("/3/genre/tv/list", {
         params: {
-          language: languageCode, // Pass language as a parameter
+          language: languageCode,
         },
       });
       return response.data.genres;

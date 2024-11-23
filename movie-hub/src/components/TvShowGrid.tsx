@@ -6,7 +6,6 @@ import Spinner from "./Spinner";
 import TvShowSkeleton from "./TvShowSkeleton";
 import { PersistentOutline } from "./PersistentOutline";
 import "../App.css";
-import { Region } from "../hooks/useRegions";
 import { useTranslation } from "react-i18next";
 
 interface TvShowsData {
@@ -30,7 +29,7 @@ interface OutlinePosition {
   height: number;
 }
 
-const TvShowGrid: React.FC<Props> = ({ tvShowsData, selectedPlatform }) => {
+const TvShowGrid = ({ tvShowsData, selectedPlatform }:Props) => {
   const { t } = useTranslation();
   const {
     data,
@@ -104,16 +103,15 @@ const TvShowGrid: React.FC<Props> = ({ tvShowsData, selectedPlatform }) => {
         height: cardRect.height + 9,
       });
 
-      // Scale the outline when hovered
       setScaleFactor(1.04);
       setHoveredCard(tvShowId);
     }
   };
 
   const handleCardLeave = () => {
-    // Reset the outline when not hovered
+
     setHoveredCard(null);
-    setScaleFactor(1); // Reset to original scale
+    setScaleFactor(1);
   };
 
   return (

@@ -7,14 +7,14 @@ interface Props {
   onSelectedRegion: (region: Region) => void;
   selectedRegion: Region | null;
   onApply: () => void;
-  className?: string; // Optional className prop
+  className?: string;
 }
 
 const RegionSelector = ({
   onSelectedRegion,
   selectedRegion,
   onApply,
-  className, // Destructure the className prop
+  className,
 }: Props) => {
   const { data, error, isLoading } = useRegions();
   const [isOpen, setIsOpen] = useState(false);

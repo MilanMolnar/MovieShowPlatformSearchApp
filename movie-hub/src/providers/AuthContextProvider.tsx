@@ -11,11 +11,13 @@ interface AuthContextType {
   setUserProfile: (profile: UserProfile | null) => void;
 }
 
+interface Props {
+  children : React.ReactNode 
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider = ({children}:Props) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {

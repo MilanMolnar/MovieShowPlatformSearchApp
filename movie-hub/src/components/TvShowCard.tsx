@@ -8,7 +8,7 @@ interface Props {
   tvShow: TvShow;
 }
 
-const TvShowCard: React.FC<Props> = ({ tvShow }) => {
+const TvShowCard = ({ tvShow }:Props) => {
   const imageUrl = tvShow.backdrop_path
     ? `https://image.tmdb.org/t/p/w500${tvShow.backdrop_path}`
     : placeholderImage;

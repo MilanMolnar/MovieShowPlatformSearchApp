@@ -1,9 +1,7 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
-import TMDBLogo from "../assets/TMDB.svg";
 import { useDarkMode } from "../providers/DarkmodeContextProvider";
 
-const CreditFooter: React.FC = () => {
+const CreditFooter = () => {
   const { t } = useTranslation();
   const { darkMode } = useDarkMode();
 
@@ -17,7 +15,6 @@ const CreditFooter: React.FC = () => {
           className="font-bold ml-5 flex pointer-events-auto relative"
           href="https://vercel.com/blog/building-an-interactive-3d-event-badge-with-react-three-fiber"
         >
-          {/* Bubble Background */}
           {darkMode && (
             <div className="absolute inset-0 flex justify-center items-center w-32 -m-2 rounded-full dark:bg-white"></div>
           )}

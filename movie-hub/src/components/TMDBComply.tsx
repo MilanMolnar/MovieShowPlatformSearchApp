@@ -1,4 +1,3 @@
-import React from "react";
 import TMDBLogo from "../assets/TMDB.svg";
 import { useTranslation } from "react-i18next";
 

@@ -40,16 +40,16 @@ const GenreList = ({ onSelectGenres }: Props) => {
   const { data, error, isLoading } = useGenres();
   const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
 
-  const { language } = useLanguage(); // Get current language from i18next
+  const { language } = useLanguage(); 
 
   const handleGenreClick = (genre: Genre) => {
     setSelectedGenres((prev) => {
       const isSelected = prev.find((g) => g.id === genre.id);
       const updatedGenres = isSelected
-        ? prev.filter((g) => g.id !== genre.id) // Deselect
-        : [...prev, genre]; // Select
+        ? prev.filter((g) => g.id !== genre.id)
+        : [...prev, genre];
 
-      onSelectGenres(updatedGenres); // Update the parent component immediately
+      onSelectGenres(updatedGenres);
       return updatedGenres;
     });
   };
@@ -67,7 +67,6 @@ const GenreList = ({ onSelectGenres }: Props) => {
     return <div className="error">{t("error_loading_genres")}</div>;
   }
 
-  // Get the translation map for the current language
   const translations = genreTranslations[language] || genreTranslations.en;
 
   return (
@@ -76,8 +75,8 @@ const GenreList = ({ onSelectGenres }: Props) => {
         <p
           className={`text-3xl select-none font-bold text-center mt-[9px] mx-4 mb-4 ${
             selectedGenres.length > 0
-              ? "text-gray-900 dark:text-gray-300 underline" // Lighter shade when at least one genre is selected
-              : "text-gray-900 dark:text-gray-300 " // Default color when no genre is selected
+              ? "text-gray-900 dark:text-gray-300 underline" 
+              : "text-gray-900 dark:text-gray-300 " 
           }`}
         >
           {t("genres")}
@@ -95,7 +94,6 @@ const GenreList = ({ onSelectGenres }: Props) => {
             onClick={() => handleGenreClick(genre)}
           >
             {translations[genre.name] || genre.name}{" "}
-            {/* Use the translated genre name */}
           </button>
         ))}
       </div>

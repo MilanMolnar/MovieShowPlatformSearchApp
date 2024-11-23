@@ -57,7 +57,6 @@ const SeasonSelector: React.FC<SeasonSelectorProps> = ({
         {isOpen ? <FaCaretUp size={20} /> : <FaCaretDown size={20} />}
       </button>
 
-      {/* Dropdown */}
       <div
         className={`origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 max-h-[440px] overflow-auto custom-scrollbar z-50 transition-all duration-300 ease-in-out transform ${
           isOpen ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"

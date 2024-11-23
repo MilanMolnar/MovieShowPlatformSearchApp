@@ -71,5 +71,11 @@
   "visitor": "L Á T O G A T Ó",
   "defaultRegion": "Magyarországi",
   "powered": "Az API-t szolgáltatja:",
-  "noOverview": "Nem találtunk Magyar nyelvű áttekintőt."
+  "noOverview": "Nem találtunk Magyar nyelvű áttekintőt.",
+  "AiSearchResults": "Mesterséges Intelligencia keresés eredménye",
+  "AIFind": "AI Kereső",
+  "LetsSearch": "Keresés indítása",
+  "Thinking": "Gondolkozom...",
+  "AIFindings": "AI Találatok",
+  "Describe": "Írd le milyen Tv műsort szeretnél látni..."
 }

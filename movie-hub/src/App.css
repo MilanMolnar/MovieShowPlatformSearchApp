@@ -4,45 +4,63 @@ body {
 }
 
 .dark body {
-  /* if dark mode is enabled */
+
   background-color: #1a202c;
   color: #f7fafc;
 }
 .no-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
 }
 
 .no-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
+  display: none; 
 }
 .no-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
 }
 
 .no-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
+  display: none; 
 }
 .no-scroll {
-  overflow: hidden; /* Disables both horizontal and vertical scrolling */
+  overflow: hidden; 
 }
-/* Custom scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px; /* Make the scrollbar thin */
+  width: 6px; 
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgb(36, 36, 46); /* Make the scrollbar black */
-  border-radius: 10px; /* Round edges of the scrollbar */
+  background-color: rgb(36, 36, 46);
+  border-radius: 10px; 
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background-color: transparent; /* Make the track transparent */
+  background-color: transparent;
 }
 
-/* Custom scrollbar for Firefox */
+
 .custom-scrollbar {
-  scrollbar-width: thin; /* Make the scrollbar thin */
-  scrollbar-color: rgb(26, 26, 36) transparent; /* Make the scrollbar black with transparent track */
+  scrollbar-width: thin;
+  scrollbar-color: rgb(26, 26, 36) transparent; 
+}
+
+.loader {
+  border-top-color: #3498db;
+  animation: spinner 1.5s linear infinite;
+}
+
+.dark .loader {
+  border-top-color: #1f2130;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

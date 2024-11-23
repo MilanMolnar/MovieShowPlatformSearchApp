@@ -9,6 +9,7 @@ interface Props {
   platform: Platform | null;
   searchQuery: string;
   isSearching: boolean;
+  isAISearching: boolean;
   region: Region;
 }
 
@@ -16,13 +17,16 @@ const TvShowHeading = ({
   genres,
   platform,
   searchQuery,
+  isAISearching,
   isSearching,
   region,
 }: Props) => {
   const { t } = useTranslation();
   const headingStyle =
     "text-3xl md:text-4xl select-none font-bold ml-4 mt-10 mb-6 text-gray-900 dark:text-gray-300";
-
+    if (isAISearching) {
+      return <h1 className={headingStyle}>{t("AiSearchResults")}</h1>;
+    }
   if (isSearching) {
     return <h1 className={headingStyle}>{t("result_for", { searchQuery })}</h1>;
   }

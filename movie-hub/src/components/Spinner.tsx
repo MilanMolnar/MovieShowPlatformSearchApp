@@ -1,5 +1,4 @@
-import React from "react";
-import "./Spinner.css";
+import "../App.css";
 
 const Spinner = () => (
   <div className="flex justify-center items-center">

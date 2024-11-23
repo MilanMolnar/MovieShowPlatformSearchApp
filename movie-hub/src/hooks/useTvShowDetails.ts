@@ -55,25 +55,25 @@ export interface TvShowDetails {
 }
 
 const useTvShowDetails = (id: string) => {
-  const { language } = useLanguage(); // Get the current language from context
+  const { language } = useLanguage();
 
-  // Map the language codes to TMDB-supported language codes
+
   const languageMap: { [key: string]: string } = {
     en: "en-US",
     hu: "hu-HU",
     es: "es-ES",
-    ge: "de-DE", // TMDB uses 'de' for German
+    ge: "de-DE",
     ja: "ja-JP",
   };
 
-  const languageCode = languageMap[language] || "en-US"; // Default to "en-US" if language is not found
+  const languageCode = languageMap[language] || "en-US";
 
   return useQuery<TvShowDetails, AxiosError>({
-    queryKey: ["tvShowDetails", id, languageCode], // Include languageCode in queryKey
+    queryKey: ["tvShowDetails", id, languageCode],
     queryFn: async () => {
       const response = await apiClient.get<TvShowDetails>(`/3/tv/${id}`, {
         params: {
-          language: languageCode, // Pass language as a parameter
+          language: languageCode,
         },
       });
       return response.data;

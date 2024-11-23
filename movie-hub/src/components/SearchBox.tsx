@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 const SearchBox = () => {
   const [inputValue, setInputValue] = useState("");
   const { handleSearch, setIsSearching } = useSearch();
-  const navigate = useNavigate(); // React Router's navigation hook
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const SearchBox = () => {
   const handleSearchSubmit = () => {
     if (inputValue) {
       handleSearch(inputValue);
-      navigate("/"); // Redirect to the homepage
+      navigate("/"); 
     }
   };
 
@@ -49,7 +49,7 @@ const SearchBox = () => {
         placeholder={t("search_placeholder")}
         value={inputValue}
         onChange={handleInputChange}
-        onKeyDown={handleKeyDown} // Trigger search on Enter key press
+        onKeyDown={handleKeyDown}
       />
       <button
         onClick={handleClear}
@@ -58,7 +58,7 @@ const SearchBox = () => {
         <FaTimes />
       </button>
       <button
-        onClick={handleSearchSubmit} // Trigger search and navigate on icon click
+        onClick={handleSearchSubmit} 
         className="px-4 font-bold text-white bg-blue-500 rounded-r-md hover:bg-blue-600 dark:bg-gray-600 dark:hover:bg-gray-500"
       >
         <FaSearch />

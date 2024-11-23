@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import useProviders from "../hooks/useProviders";
 import useTvShowDetails from "../hooks/useTvShowDetails";
@@ -29,19 +29,16 @@ const TvShowDetailPage = () => {
     );
   };
 
-  // Fetch TV show details
   const { data: tvShowDetails, isLoading: isTvShowLoading } = useTvShowDetails(
     id!
   );
 
-  // Fetch providers for the selected season and region
   const {
     data: providers,
     isLoading: isProvidersLoading,
     isError: isProvidersError,
   } = useProviders(Number(id), season, region.iso_3166_1);
 
-  // Fetch available regions
   const {
     data: regions,
     isLoading: isRegionsLoading,
@@ -52,7 +49,6 @@ const TvShowDetailPage = () => {
     id!
   );
 
-  // Fetch specific season details
   const {
     data: seasonDetails,
     isLoading: isSeasonLoading,

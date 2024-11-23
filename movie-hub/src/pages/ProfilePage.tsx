@@ -1,8 +1,8 @@
-import React from "react";
 import { useAuth } from "../providers/AuthContextProvider";
 import AuthContainer from "../components/AuthContainer";
 import BadgeScene from "../components/BadgeScene";
 import CreditFooter from "../components/CreditFooter";
+import ChatGPTTokenInput from "../components/ChatGPTTokenInput";
 
 const ProfilePage = () => {
   const { userProfile } = useAuth();
@@ -18,7 +18,14 @@ const ProfilePage = () => {
           !userProfile ? "pt-36" : "md:pl-20 pt-10 md:pt-36"
         }`}
       >
+        <div >
         <AuthContainer />
+        </div>
+        {userProfile && (
+        <div className="z-50">
+          <ChatGPTTokenInput />
+        </div>
+      )}
       </div>
       {/* Conditionally render BadgeScene only if user is logged in */}
       {userProfile && (

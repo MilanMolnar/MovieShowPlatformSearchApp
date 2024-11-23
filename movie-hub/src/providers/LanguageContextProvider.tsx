@@ -1,9 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import initReactI18next from "../translationInit"; // Assuming this is your i18next initialization
+import initReactI18next from "../translationInit";
 
 interface LanguageContextType {
   language: string;
-  setLanguage: (lang: string) => void; // Update to have a setter function
+  setLanguage: (lang: string) => void;
 }
 
 interface Props {
@@ -21,8 +21,8 @@ export const LanguageContextProvider = ({ children }: Props) => {
   );
 
   useEffect(() => {
-    initReactI18next.changeLanguage(language); // Sync the i18n language with the context language
-    localStorage.setItem("language", language); // Save language in local storage
+    initReactI18next.changeLanguage(language);
+    localStorage.setItem("language", language);
   }, [language]);
 
   return (

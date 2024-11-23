@@ -6,13 +6,11 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import { useDarkMode } from "../providers/DarkmodeContextProvider";
 import SearchBox from "./SearchBox";
 import { useAuth } from "../providers/AuthContextProvider";
-import { useTranslation } from "react-i18next";
-import LanguageSelector from "./LanguageSelector"; // Import LanguageSelector
+import LanguageSelector from "./LanguageSelector";
 
 const NavBar: React.FC = () => {
   const { darkMode } = useDarkMode();
   const { userProfile } = useAuth();
-  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -85,7 +83,7 @@ const NavBar: React.FC = () => {
         )}
       </div>
       <div className="hidden md:flex items-center space-x-4 mx-3">
-        <LanguageSelector /> {/* Add LanguageSelector here */}
+        <LanguageSelector />
       </div>
     </nav>
   );

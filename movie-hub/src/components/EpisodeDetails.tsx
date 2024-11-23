@@ -4,17 +4,17 @@ import useEpisodeDetails from "../hooks/useEpisodeDetails";
 import Spinner from "./Spinner";
 import { useTranslation } from "react-i18next";
 
-interface EpisodeDetailsProps {
+interface Props {
   seriesId: number;
   seasonNumber: number;
   episodeNumber: number;
 }
 
-const EpisodeDetails: React.FC<EpisodeDetailsProps> = ({
+const EpisodeDetails = ({
   seriesId,
   seasonNumber,
   episodeNumber,
-}) => {
+}:Props) => {
   const { t } = useTranslation();
   const {
     data: episodeDetails,
@@ -25,7 +25,7 @@ const EpisodeDetails: React.FC<EpisodeDetailsProps> = ({
   const [isGuestStarsExpanded, setIsGuestStarsExpanded] = useState(false);
 
   if (isLoading) return <Spinner />;
-  if (isError) return <div>{t("error_loading_details")}</div>; // Added translation key for error message
+  if (isError) return <div>{t("error_loading_details")}</div>;
   if (!episodeDetails) return null;
 
   return (

@@ -1,4 +1,3 @@
-import React from "react";
 import TMDBLogo from "../assets/TMDB.svg";
 import { useTranslation } from "react-i18next";
 
@@ -6,7 +5,7 @@ interface Props {
   onAccept: () => void;
 }
 
-const CookieConsent: React.FC<Props> = ({ onAccept }) => {
+const CookieConsent= ({ onAccept }:Props) => {
   const { t } = useTranslation();
 
   return (

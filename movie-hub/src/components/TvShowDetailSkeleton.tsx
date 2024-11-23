@@ -1,14 +1,12 @@
-import React from "react";
-
 const TvShowDetailSkeleton = () => {
   return (
     <div className=" max-w-5xl w-[330px] lg:w-[950px] md:w-[700px] sm:w-[500px] animate-pulse">
-      {/* Placeholder for the backdrop */}
+
       <div className="relative h-96 mb-6 overflow-hidden bg-gray-700 ">
         <div className="absolute inset-0 bg-gray-300"></div>
       </div>
 
-      {/* Placeholder for TV show details */}
+
       <div className="mb-4 grid gap-4 md:grid-cols-2">
         <div className="h-6 bg-gray-600  w-3/4"></div>
         <div className="h-6 bg-gray-600  w-1/2"></div>
@@ -26,7 +24,7 @@ const TvShowDetailSkeleton = () => {
         <div className="h-6 bg-gray-600  w-1/4"></div>
       </div>
 
-      {/* Placeholder for dropdowns */}
+
       <div className="mb-6 mt-3 grid gap-4 md:grid-cols-2">
         <div className="h-10 bg-gray-600  w-full"></div>
         <div className="h-10 bg-gray-600  w-full"></div>

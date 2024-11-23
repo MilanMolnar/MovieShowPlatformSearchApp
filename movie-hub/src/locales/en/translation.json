@@ -71,5 +71,11 @@
   "visitor": "V I S I T O R  P A S S",
   "defaultRegion": "Hungary",
   "powered": "Powered by:",
-  "noOverview": "No Overview Provided."
+  "noOverview": "No Overview Provided.",
+  "AiSearchResults": "AI Search results based on your description",
+  "AIFind": "AI Find",
+  "LetsSearch": "Let's Search",
+  "Thinking": "Thinking...",
+  "AIFindings": "AI Findings",
+  "Describe": "Describe the show you're looking for..."
 }

@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Region } from "../hooks/useRegions"; // Import Region interface
-import { useTranslation } from "react-i18next";
+import { createContext, useContext, useState, ReactNode } from "react";
+import { Region } from "../hooks/useRegions";
 import { useLanguage } from "./LanguageContextProvider";
 
 interface RegionContextType {
@@ -8,12 +7,13 @@ interface RegionContextType {
   setRegion: (region: Region) => void;
 }
 
+interface Props {
+  children: React.ReactNode
+}
+
 const RegionContext = createContext<RegionContextType | undefined>(undefined);
 
-export const RegionProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const { t } = useTranslation();
+export const RegionProvider = ({children}:Props) => {
   const { language } = useLanguage();
   const [region, setRegion] = useState<Region>({
     iso_3166_1: "HU",
