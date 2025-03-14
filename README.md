@@ -1,0 +1,1 @@
+This is a react project for searching platforms for tv shows based on regions and platforms (with the optional help of chat gpt based search partner) using: https://www.themoviedb.org/ API as a backend, you can try it here: https://movie-hub-beryl.vercel.app/
