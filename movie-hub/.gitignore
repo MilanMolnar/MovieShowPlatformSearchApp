@@ -25,5 +25,6 @@ dist-ssr
 *.sw?
 .vercel
 .env
-*env
+*.env
 movie-hub/.env
+env

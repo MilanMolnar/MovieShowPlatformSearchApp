@@ -22,7 +22,17 @@ const LanguageSelector: React.FC = () => {
   };
 
   return (
-    <div className="relative w-32">
+    <div className="relative w-24 bg-gray-200 dark:bg-gray-800 rounded-auto">
+      <select
+        value={language}
+        onChange={handleLanguageChange}
+        className=" bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-2 py-2 focus:outline-none">
+        {languages.map((lang) => (
+          <option key={lang.code} value={lang.code}>
+            {lang.label}
+          </option>
+        ))}
+      </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
         <img
           src={
@@ -32,17 +42,6 @@ const LanguageSelector: React.FC = () => {
           className="w-6 h-6"
         />
       </div>
-      <select
-        value={language}
-        onChange={handleLanguageChange}
-        className="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 py-2 rounded focus:outline-none"
-      >
-        {languages.map((lang) => (
-          <option key={lang.code} value={lang.code}>
-            {lang.label}
-          </option>
-        ))}
-      </select>
     </div>
   );
 };
