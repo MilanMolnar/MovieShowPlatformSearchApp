@@ -73,12 +73,11 @@ const AuthContainer: React.FC = () => {
 
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center z-10">
         <div
           className={`bg-white dark:bg-gray-800 rounded-lg shadow-xl p-10 sm:max-w-sm md:max-w-lg lg:max-w-xl w-full transform transition-transform ${
             !userProfile && "lg:p-20"
-          }`}
-        >
+          }`}>
           <h2 className="text-3xl font-semibold text-center text-gray-900 dark:text-white mb-8">
             {userProfile ? t("account") : t("sign_in")}
           </h2>
@@ -111,8 +110,7 @@ const AuthContainer: React.FC = () => {
               </p>
               <button
                 onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded w-full transition-colors"
-              >
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded w-full transition-colors">
                 {t("logout")}
               </button>
             </div>

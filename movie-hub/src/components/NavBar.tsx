@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logoLight from "../assets/light_logo.webp";
 import logoDark from "../assets/logo.webp";
@@ -13,6 +13,7 @@ const NavBar: React.FC = () => {
   const { userProfile } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -34,55 +35,79 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <nav className="flex flex-col md:flex-row items-center justify-between bg-gray-100 dark:bg-gray-900">
-      <div className="w-full md:w-auto flex justify-between items-center mb-4 md:mb-0">
-        <button onClick={handleLogoClick} className="md:mr-4">
-          <img
-            src={logoSrc}
-            alt="logo"
-            className="w-24 min-w-20 h-auto md:w-20 md:h-20 shadow"
-          />
+    <nav className="relative flex flex-row items-center justify-between bg-gray-100 dark:bg-gray-900 p-4">
+      <div className="flex items-center">
+        <button onClick={handleLogoClick}>
+          <img src={logoSrc} alt="logo" className="w-20 shadow" />
         </button>
-        <div className="flex md:hidden items-center space-x-4 mr-5">
-          <ColorModeSwitch />
-          {userProfile ? (
-            <Link to={"/profile"}>
-              <img
-                src={userProfile.picture}
-                alt="Profile"
-                className="w-11 min-w-11 h-11 min-h-11 rounded-full"
-              />
-            </Link>
-          ) : (
-            <span className="text-base text-gray-800 dark:text-gray-200">
-              <Link to={"/profile"}>Login</Link>
-            </span>
-          )}
-          <div className="flex md:hidden mx-2">
-            <LanguageSelector /> {/* Add LanguageSelector here */}
-          </div>
-        </div>
       </div>
-      <div className="w-full mb-4 md:mb-0 mr-5">
+
+      <div className="flex-grow mx-4">
         <SearchBox />
       </div>
-      <div className="hidden md:flex items-center space-x-6 mr-5 sm:mr-5">
+
+      {/* Desktop menu */}
+      <div className="hidden md:flex flex-row items-center space-x-4">
         <ColorModeSwitch />
         {userProfile ? (
-          <Link to={"/profile"}>
+          <Link to="/profile">
             <img
               src={userProfile.picture}
               alt="Profile"
-              className="w-11 min-w-11 h-11 min-h-11 rounded-full"
+              className="w-11 h-11 rounded-full"
             />
           </Link>
         ) : (
           <span className="text-lg text-gray-800 dark:text-gray-200">
-            <Link to={"/profile"}>Login</Link>
+            <Link to="/profile">Login</Link>
           </span>
         )}
+        <LanguageSelector />
       </div>
-      <div className="hidden md:flex items-center space-x-4 mx-3">
+
+      {/* Mobile menu button */}
+      <div className="md:hidden">
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="p-2 rounded focus:outline-none focus:ring">
+          <svg
+            className="w-6 h-6 text-gray-800 dark:text-gray-200"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile dropdown with fade in/out animation */}
+      <div
+        className={`fixed top-16 right-4 bg-gray-100 dark:bg-gray-900 rounded-lg flex flex-col items-center space-y-4 shadow-xl shadow-gray-300 dark:shadow-gray-950 w-24 p-6 transition-opacity duration-300 z-[99999] ${
+          mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}>
+        {userProfile ? (
+          <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
+            <img
+              src={userProfile.picture}
+              alt="Profile"
+              className="w-11 h-11 rounded-full"
+            />
+          </Link>
+        ) : (
+          <Link
+            to="/profile"
+            className="text-lg text-gray-800 dark:text-gray-200"
+            onClick={() => setMobileMenuOpen(false)}>
+            Login
+          </Link>
+        )}
+        <ColorModeSwitch />
+
         <LanguageSelector />
       </div>
     </nav>

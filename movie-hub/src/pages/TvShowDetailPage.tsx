@@ -72,19 +72,18 @@ const TvShowDetailPage = () => {
           <>
             {/* TV Show Banner */}
             <div
-              className="relative h-96 mb-6 w-[330px] lg:w-[950px] md:w-[700px] sm:w-[500px] overflow-hidden shadow-lg"
+              className="relative h-96 mb-6 w-full sm:w-[500px] md:w-[700px] lg:w-[950px] overflow-hidden shadow-lg"
               style={{
                 backgroundImage: `url(https://image.tmdb.org/t/p/w1280${tvShowDetails.backdrop_path})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-              }}
-            >
+              }}>
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-300 dark:from-gray-900 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 p-6">
-                <h1 className="text-3xl md:text-4xl font-bold text-zinc-600 dark:text-white truncate">
+              <div className="absolute bottom-0 left-0 w-full p-6">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-600 dark:text-white">
                   {tvShowDetails.name}
                 </h1>
-                <p className="text-base md:text-lg text-zinc-600 dark:text-gray-300 line-clamp-3">
+                <p className="text-sm sm:text-base md:text-lg text-zinc-600 dark:text-gray-300 line-clamp-3">
                   {tvShowDetails.overview}
                 </p>
               </div>
@@ -199,8 +198,7 @@ const TvShowDetailPage = () => {
                     {providers.map((provider) => (
                       <li
                         key={provider.provider_id}
-                        className="flex items-center space-x-2"
-                      >
+                        className="flex items-center space-x-2">
                         <img
                           src={`https://image.tmdb.org/t/p/w45${provider.logo_path}`}
                           alt={provider.provider_name}
@@ -256,19 +254,16 @@ const TvShowDetailPage = () => {
                     {seasonDetails.episodes.map((episode) => (
                       <li
                         key={episode.id}
-                        className="flex flex-col space-y-2 pt-5"
-                      >
+                        className="flex flex-col space-y-2 pt-5">
                         <div
                           className="flex items-start space-x-2 cursor-pointer"
-                          onClick={() => toggleEpisode(episode.episode_number)}
-                        >
+                          onClick={() => toggleEpisode(episode.episode_number)}>
                           <div
                             className="w-20 h-20 flex-shrink-0 relative"
                             onMouseEnter={() =>
                               setHoveredEpisode(episode.episode_number)
                             }
-                            onMouseLeave={() => setHoveredEpisode(null)}
-                          >
+                            onMouseLeave={() => setHoveredEpisode(null)}>
                             {episode.still_path && (
                               <img
                                 src={`https://image.tmdb.org/t/p/w154${episode.still_path}`}

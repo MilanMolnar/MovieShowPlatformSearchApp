@@ -31,7 +31,7 @@ const SearchBox = () => {
   const handleSearchSubmit = () => {
     if (inputValue) {
       handleSearch(inputValue);
-      navigate("/"); 
+      navigate("/");
     }
   };
 
@@ -42,7 +42,7 @@ const SearchBox = () => {
   };
 
   return (
-    <div className="flex lg:w-[500px] md:w-[500px] ml-5 bg-gray-100 dark:bg-gray-800 rounded-md">
+    <div className="flex xl:w-[700px] lg:w-[500px] md:w-[380px] min-w-[175px] md:ml-2  bg-gray-100 dark:bg-gray-800 rounded-md">
       <input
         className="w-full px-4 py-1 text-gray-700 dark:text-gray-300 rounded-l-md bg-gray-300 dark:bg-gray-800 focus:outline-none focus:bg-white dark:focus:bg-gray-700"
         type="text"
@@ -53,14 +53,12 @@ const SearchBox = () => {
       />
       <button
         onClick={handleClear}
-        className="px-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-      >
+        className="px-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
         <FaTimes />
       </button>
       <button
-        onClick={handleSearchSubmit} 
-        className="px-4 font-bold text-white bg-blue-500 rounded-r-md hover:bg-blue-600 dark:bg-gray-600 dark:hover:bg-gray-500"
-      >
+        onClick={handleSearchSubmit}
+        className="px-4 font-bold text-white bg-blue-500 rounded-r-md hover:bg-blue-600 dark:bg-gray-600 dark:hover:bg-gray-500">
         <FaSearch />
       </button>
     </div>

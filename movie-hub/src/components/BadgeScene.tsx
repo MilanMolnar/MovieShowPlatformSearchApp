@@ -230,8 +230,7 @@ function Band({
           position={[2, 0, 0]}
           ref={card}
           {...segmentProps}
-          type={dragged ? "kinematicPosition" : "dynamic"}
-        >
+          type={dragged ? "kinematicPosition" : "dynamic"}>
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group
             scale={2.25}
@@ -249,15 +248,13 @@ function Band({
                   .copy(e.point)
                   .sub(vec.copy(card.current!.translation() as THREE.Vector3))
               );
-            }}
-          >
+            }}>
             {/* Carabiner */}
             <mesh
               ref={carabiner}
               position={[1, 0, 0]} // Position between band and card
               scale={[0, 0, 0]}
-              rotation={[Math.PI / 2, 0, 0]}
-            >
+              rotation={[Math.PI / 2, 0, 0]}>
               <torusGeometry args={[0.2, 0.05, 16, 100]} />
               <meshStandardMaterial color="gray" />
             </mesh>
