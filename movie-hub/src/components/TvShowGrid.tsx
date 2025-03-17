@@ -48,6 +48,21 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
     useState<OutlinePosition | null>(null);
   const [scaleFactor, setScaleFactor] = useState<number>(1);
 
+  // State to detect mobile devices based on window width.
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Check initial width.
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     if (!fetchNextPage || !hasNextPage) return;
 
@@ -73,10 +88,16 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   const scrollToTop = () => {
-    const mainContent = document.querySelector("main");
     setShowScrollToTop(false);
-    if (mainContent) {
+    const mainContent = document.querySelector("main");
+
+    if (mainContent && mainContent.scrollHeight > mainContent.clientHeight) {
       mainContent.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } else {
+      window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
@@ -89,6 +110,8 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
     event: React.MouseEvent<HTMLDivElement>,
     tvShowId: number
   ) => {
+    if (isMobile) return; // Disable hover effects on mobile
+
     const card = event.currentTarget.querySelector(
       ".card-inner"
     ) as HTMLElement;
@@ -109,13 +132,16 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
   };
 
   const handleCardLeave = () => {
+    if (isMobile) return; // Disable hover effects on mobile
+
     setHoveredCard(null);
     setScaleFactor(0.9);
   };
 
   return (
     <div className="relative overflow-hidden">
-      {outlinePosition && (
+      {/* Render PersistentOutline only on non-mobile devices */}
+      {!isMobile && outlinePosition && (
         <PersistentOutline
           position={outlinePosition}
           scaleFactor={scaleFactor}
@@ -149,7 +175,7 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
       {showScrollToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-4 w-32 left-1/2 transform -translate-x-1/2 bg-blue-500 dark:bg-slate-500 text-white p-2 rounded-full shadow-lg z-50  transition-all duration-300 ease-in-out opacity-60 hover:opacity-100">
+          className="fixed bottom-4 w-32 left-1/2 transform -translate-x-1/2 bg-blue-500 dark:bg-slate-500 text-white p-2 rounded-full shadow-lg z-50 transition-all duration-300 ease-in-out opacity-60 hover:opacity-100">
           {t("back_to_top")}
         </button>
       )}

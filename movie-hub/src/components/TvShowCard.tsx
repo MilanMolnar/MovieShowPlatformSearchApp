@@ -26,7 +26,7 @@ const TvShowCard = ({ tvShow }: Props) => {
           <div className="absolute inset-0 bg-gradient-to-t from-gray-600 dark:from-gray-900 to-transparent" />
           {/* Content */}
           <div className="absolute justify-between bottom-0 w-full h-15 flex items-center p-4">
-            <h2 className="text-gray-300 group-hover:text-white transition-colors duration-300 ease-in-out text-xl font-bold">
+            <h2 className="text-gray-300 group-hover:text-white pr-3 transition-colors duration-300 ease-in-out text-xl font-bold">
               {tvShow.name}
             </h2>
             <Rating averageVote={tvShow.vote_average} />
