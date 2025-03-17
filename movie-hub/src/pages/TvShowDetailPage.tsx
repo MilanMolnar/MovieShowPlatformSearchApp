@@ -72,7 +72,7 @@ const TvShowDetailPage = () => {
           <>
             {/* TV Show Banner */}
             <div
-              className="relative h-96 mb-6 w-full sm:w-[500px] md:w-[700px] lg:w-[950px] overflow-hidden shadow-lg"
+              className="relative h-96 mb-6 w-full  lg:w-[950px] overflow-hidden shadow-lg"
               style={{
                 backgroundImage: `url(https://image.tmdb.org/t/p/w1280${tvShowDetails.backdrop_path})`,
                 backgroundSize: "cover",
