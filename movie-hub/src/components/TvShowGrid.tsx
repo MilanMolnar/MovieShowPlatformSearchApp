@@ -29,7 +29,7 @@ interface OutlinePosition {
   height: number;
 }
 
-const TvShowGrid = ({ tvShowsData, selectedPlatform }:Props) => {
+const TvShowGrid = ({ tvShowsData, selectedPlatform }: Props) => {
   const { t } = useTranslation();
   const {
     data,
@@ -103,15 +103,14 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }:Props) => {
         height: cardRect.height + 9,
       });
 
-      setScaleFactor(1.04);
+      setScaleFactor(1.01);
       setHoveredCard(tvShowId);
     }
   };
 
   const handleCardLeave = () => {
-
     setHoveredCard(null);
-    setScaleFactor(1);
+    setScaleFactor(0.9);
   };
 
   return (
@@ -125,8 +124,7 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }:Props) => {
       {error && <div>{t("error_loading_tv_shows")}</div>}
       <div
         ref={gridRef}
-        className="grid lg:grid-cols-3 lm:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-1 mt-2 overflow-hidden"
-      >
+        className="grid lg:grid-cols-3 lm:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-1 mt-2 overflow-hidden">
         {isLoading &&
           skeletonCount.map((skeleton) => <TvShowSkeleton key={skeleton} />)}
         {data.length === 0 && !isLoading ? (
@@ -138,8 +136,7 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }:Props) => {
             <div
               key={tvShow.id}
               onMouseEnter={(e) => handleCardHover(e, tvShow.id)}
-              onMouseLeave={handleCardLeave}
-            >
+              onMouseLeave={handleCardLeave}>
               <TvShowCard tvShow={tvShow} />
             </div>
           ))
@@ -152,8 +149,7 @@ const TvShowGrid = ({ tvShowsData, selectedPlatform }:Props) => {
       {showScrollToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-4 w-32 left-1/2 transform -translate-x-1/2 bg-blue-500 dark:bg-slate-500 text-white p-2 rounded-full shadow-lg z-50  transition-all duration-300 ease-in-out opacity-60 hover:opacity-100"
-        >
+          className="fixed bottom-4 w-32 left-1/2 transform -translate-x-1/2 bg-blue-500 dark:bg-slate-500 text-white p-2 rounded-full shadow-lg z-50  transition-all duration-300 ease-in-out opacity-60 hover:opacity-100">
           {t("back_to_top")}
         </button>
       )}
