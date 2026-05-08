@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Modal from "./Modal"; // adjust the path if needed
+import { useSearch } from "../providers/SearchmodeContextProvider";
 
 const ChatGPTTokenInput: React.FC = () => {
   const [token, setToken] = useState<string>("");
   const [savedToken, setSavedToken] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
+  const { aiDemoMode, setAiDemoMode } = useSearch();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("chatGPTToken");
@@ -72,6 +74,24 @@ const ChatGPTTokenInput: React.FC = () => {
               </button>
             )}
           </div>
+        </div>
+        {/* Demo mode toggle */}
+        <div className="flex items-center mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+          <input
+            id="aiDemoMode"
+            type="checkbox"
+            checked={aiDemoMode}
+            onChange={(e) => setAiDemoMode(e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-blue-500 focus:ring-blue-500 cursor-pointer"
+          />
+          <label
+            htmlFor="aiDemoMode"
+            className="ml-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer select-none">
+            AI Demo Mode{" "}
+            <span className="text-gray-400 dark:text-gray-500 text-xs">
+              (no token required — uses quick search)
+            </span>
+          </label>
         </div>
       </div>
 

@@ -28,16 +28,18 @@ const HomePage = () => {
     isAISearching,
     setIsSearching,
     setIsAISearching,
+    aiDemoMode,
   } = useSearch();
 
   const filterData = useTvShows(genres, region, platform);
   const quickSearchData = useQuickSearch(searchQuery);
-  const aiSearchData = useAISearch(aiSearchQuery);
+  const demoAISearchData = useQuickSearch(aiDemoMode ? aiSearchQuery : "");
+  const aiSearchData = useAISearch(aiDemoMode ? "" : aiSearchQuery);
 
   const tvShowsData = isSearching
     ? quickSearchData
     : isAISearching
-    ? aiSearchData
+    ? (aiDemoMode ? demoAISearchData : aiSearchData)
     : filterData;
 
   const handleApply = () => {

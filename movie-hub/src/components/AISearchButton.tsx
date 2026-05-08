@@ -1,105 +1,242 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../providers/SearchmodeContextProvider";
-import { FiRefreshCw } from "react-icons/fi";
-import { MdOutlineSavedSearch } from "react-icons/md";
+import { FiRotateCcw } from "react-icons/fi";
+import { MdOutlineSavedSearch, MdClose, MdSend } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import Modal from "./Modal";
 
+interface ChatEntry {
+  id: string;
+  userMessage: string;
+  combinedQuery: string;
+  status: "thinking" | "finding" | "done";
+}
+
 const AISearchButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [aiQuery, setAiQuery] = useState("");
-  const [loadingState, setLoadingState] = useState<
-    "idle" | "thinking" | "finding"
-  >("idle");
+  const [inputValue, setInputValue] = useState("");
+  const [chatHistory, setChatHistory] = useState<ChatEntry[]>([]);
   const [showTokenModal, setShowTokenModal] = useState(false);
-  const { handleAISearch } = useSearch();
+  const { handleAISearch, aiDemoMode } = useSearch();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  const isToken = () => {
-    const token = localStorage.getItem("chatGPTToken");
-    return !!token;
+  const isToken = () => !!localStorage.getItem("chatGPTToken");
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatHistory]);
+
+  const buildCombinedQuery = (history: ChatEntry[], newMessage: string) => {
+    const previous = history.map((e) => e.userMessage);
+    return [...previous, newMessage].join(", ");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (aiQuery.trim()) {
-      setLoadingState("thinking");
-      handleAISearch(aiQuery);
+  const isProcessing = chatHistory.some(
+    (e) => e.status === "thinking" || e.status === "finding"
+  );
+
+  const handleSubmit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    const trimmed = inputValue.trim();
+    if (!trimmed || isProcessing) return;
+
+    const newId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const combinedQuery = buildCombinedQuery(chatHistory, trimmed);
+
+    const newEntry: ChatEntry = {
+      id: newId,
+      userMessage: trimmed,
+      combinedQuery,
+      status: "thinking",
+    };
+
+    setChatHistory((prev) => [...prev, newEntry]);
+    handleAISearch(combinedQuery);
+    setInputValue("");
+
+    setTimeout(() => {
+      setChatHistory((prev) =>
+        prev.map((e) => (e.id === newId ? { ...e, status: "finding" } : e))
+      );
       setTimeout(() => {
-        setLoadingState("finding");
-      }, 2500);
-    }
+        setChatHistory((prev) =>
+          prev.map((e) => (e.id === newId ? { ...e, status: "done" } : e))
+        );
+      }, 2000);
+    }, 2500);
   };
 
-  const handleRefresh = () => {
-    setAiQuery("");
-    setLoadingState("idle");
+  const handleRevertTo = (entry: ChatEntry) => {
+    const index = chatHistory.findIndex((e) => e.id === entry.id);
+    setChatHistory(
+      chatHistory
+        .slice(0, index + 1)
+        .map((e) => (e.id === entry.id ? { ...e, status: "done" } : e))
+    );
+    handleAISearch(entry.combinedQuery);
+    setInputValue("");
   };
 
   const handleButtonClick = () => {
-    if (!isToken()) {
-      // Open modal if no token is present
+    if (!isToken() && !aiDemoMode) {
       setShowTokenModal(true);
     } else {
       setIsOpen((prev) => !prev);
-      setLoadingState("idle");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
     }
   };
 
   return (
-    <div className="fixed bottom-6 right-6 flex flex-col items-end">
-      {/*
-        On mobile: when closed, unmount the form container (hidden)
-        On desktop: keep the container mounted so transitions work.
-      */}
+    <div className="fixed bottom-6 right-6 flex flex-col items-end z-50">
       {isOpen && (
         <div
-          className={`${
-            isOpen
-              ? "opacity-100 scale-100 translate-y-0"
-              : !isOpen
-              ? "hidden"
-              : "opacity-0 scale-90 translate-y-4 pointer-events-none"
-          } bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 mb-4 w-72 transform transition-all duration-300 ease-in-out`}>
-          <form onSubmit={handleSubmit}>
-            <textarea
-              value={aiQuery}
-              onChange={(e) => setAiQuery(e.target.value)}
-              className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
-              placeholder={t("Describe")}
-              rows={3}
-              disabled={loadingState !== "idle"}
-            />
-            <div className="flex items-center mt-2 space-x-2">
-              <button
-                type="submit"
-                className="flex-1 bg-blue-500 dark:bg-blue-600 text-white py-2 rounded-md transition duration-300 ease-in-out hover:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none"
-                disabled={loadingState !== "idle"}>
-                {loadingState === "thinking"
-                  ? t("Thinking")
-                  : loadingState === "finding"
-                  ? t("AIFindings")
-                  : t("LetsSearch")}
-              </button>
-              {loadingState === "finding" && (
+          className="bg-white dark:bg-gray-800 shadow-2xl rounded-2xl mb-4 w-80 sm:w-96 flex flex-col overflow-hidden"
+          style={{ height: "480px" }}>
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 bg-blue-500 dark:bg-blue-600 flex-shrink-0">
+            <div className="flex items-center space-x-2">
+              <MdOutlineSavedSearch size={20} className="text-white" />
+              <span className="text-white font-semibold text-sm">
+                AI Search{" "}
+                {aiDemoMode && (
+                  <span className="text-blue-200 text-xs font-normal">
+                    (Demo)
+                  </span>
+                )}
+              </span>
+            </div>
+            <div className="flex items-center space-x-3">
+              {chatHistory.length > 0 && (
                 <button
-                  type="button"
-                  onClick={handleRefresh}
-                  className="flex items-center justify-center bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 p-2 rounded-md transition duration-300 ease-in-out hover:bg-gray-400 dark:hover:bg-gray-500 focus:outline-none">
-                  <FiRefreshCw />
+                  onClick={() => {
+                    setChatHistory([]);
+                    setInputValue("");
+                  }}
+                  className="text-blue-200 hover:text-white focus:outline-none transition-colors text-xs"
+                  title="Start a new search">
+                  New
                 </button>
               )}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-white hover:text-blue-200 focus:outline-none transition-colors">
+                <MdClose size={20} />
+              </button>
             </div>
-          </form>
+          </div>
+
+          {/* Chat messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
+            {chatHistory.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center space-y-3 text-gray-400 dark:text-gray-500">
+                <MdOutlineSavedSearch size={48} />
+                <p className="text-sm px-4">{t("Describe")}</p>
+              </div>
+            ) : (
+              chatHistory.map((entry, index) => (
+                <div key={entry.id} className="space-y-1.5">
+                  {/* User bubble */}
+                  <div className="flex justify-end">
+                    <div className="bg-blue-500 dark:bg-blue-600 text-white rounded-2xl rounded-tr-sm px-3 py-2 max-w-[78%] text-sm leading-relaxed">
+                      {entry.userMessage}
+                    </div>
+                  </div>
+
+                  {/* AI bubble */}
+                  <div className="flex flex-col items-start">
+                    <div className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-2xl rounded-tl-sm px-3 py-2 max-w-[78%] text-sm leading-relaxed">
+                      {entry.status === "thinking" && (
+                        <span className="flex items-center space-x-1">
+                          <span
+                            className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "0ms" }}
+                          />
+                          <span
+                            className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "150ms" }}
+                          />
+                          <span
+                            className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "300ms" }}
+                          />
+                        </span>
+                      )}
+                      {entry.status === "finding" && (
+                        <span className="text-gray-500 dark:text-gray-400 animate-pulse">
+                          {t("AIFindings")}…
+                        </span>
+                      )}
+                      {entry.status === "done" && (
+                        <span>
+                          Here's what I found in theme with{" "}
+                          <span className="italic">
+                            &ldquo;{entry.combinedQuery}&rdquo;
+                          </span>{" "}
+                          ✨
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Revert button — only on non-last done entries */}
+                    {entry.status === "done" &&
+                      index < chatHistory.length - 1 && (
+                        <button
+                          onClick={() => handleRevertTo(entry)}
+                          className="mt-1.5 ml-1 flex items-center space-x-1 text-xs text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors focus:outline-none"
+                          title="Revert to this point and continue from here">
+                          <FiRotateCcw size={11} />
+                          <span>Continue from here</span>
+                        </button>
+                      )}
+                  </div>
+                </div>
+              ))
+            )}
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Input area */}
+          <div className="flex-shrink-0 border-t border-gray-200 dark:border-gray-700 p-3">
+            <form onSubmit={handleSubmit} className="flex items-end space-x-2">
+              <textarea
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={
+                  chatHistory.length === 0 ? t("Describe") : "Refine your search…"
+                }
+                rows={2}
+                disabled={isProcessing}
+                className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-none text-sm disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={isProcessing || !inputValue.trim()}
+                className="bg-blue-500 dark:bg-blue-600 text-white p-2 rounded-xl hover:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0">
+                <MdSend size={20} />
+              </button>
+            </form>
+          </div>
         </div>
       )}
+
+      {/* FAB */}
       <button
         onClick={handleButtonClick}
-        className="bg-blue-500 dark:bg-blue-600 shadow-xl shadow-black text-white h-10 w-24 rounded-lg flex items-center justify-center transition duration-300 ease-in-out hover:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none">
-        <MdOutlineSavedSearch size={20} className="mr-1" />
-        {t("AIFind")}
+        className="bg-blue-500 dark:bg-blue-600 shadow-xl shadow-black/30 text-white h-10 px-4 rounded-xl flex items-center space-x-1.5 transition duration-300 ease-in-out hover:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none">
+        <MdOutlineSavedSearch size={20} />
+        <span className="text-sm font-medium">
+          {aiDemoMode ? "Demo" : t("AIFind")}
+        </span>
       </button>
 
       {/* Modal for missing token */}

@@ -13,6 +13,8 @@ interface SearchContextProps {
   setIsAISearching: (isAISearching: boolean) => void;
   handleSearch: (query: string) => void;
   handleAISearch: (query: string) => void;
+  aiDemoMode: boolean;
+  setAiDemoMode: (value: boolean) => void;
 }
 
 interface Props {
@@ -26,6 +28,14 @@ export const SearchProvider = ({children}:Props) => {
   const [aiSearchQuery, setAISearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isAISearching, setIsAISearching] = useState<boolean>(false);
+  const [aiDemoMode, setAiDemoModeState] = useState<boolean>(
+    () => localStorage.getItem("aiDemoMode") === "true"
+  );
+
+  const setAiDemoMode = (value: boolean) => {
+    localStorage.setItem("aiDemoMode", String(value));
+    setAiDemoModeState(value);
+  };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -52,6 +62,8 @@ export const SearchProvider = ({children}:Props) => {
         setIsAISearching,
         handleSearch,
         handleAISearch,
+        aiDemoMode,
+        setAiDemoMode,
       }}
     >
       {children}
